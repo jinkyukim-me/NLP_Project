@@ -1,4 +1,4 @@
-# NLP_Project
+# NLP_Project_
 ## Group member
 * Full stack - 신정섭, 한초롱
 * Big data - 허재은, 박주영
