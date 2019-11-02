@@ -25,7 +25,7 @@ def wordcloud(data_path,book_mask_path,font_path):
 
         # Counter: 단어수 세기, 가장 많이 등장한 단어(명사) 40개
         count = Counter(nouns1)
-        tags = count.most_common(100)
+        tags = count.most_common(40)
         
         # 워드 클라우드 배경 사진
         book_mask = np.array(Image.open(book_mask_path))
