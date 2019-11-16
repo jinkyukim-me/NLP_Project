@@ -1,19 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import './index.css';
 import App from './App';
-import AppScss from './App.scss';
+import { BrowserRouter } from 'react-router-dom'
 import * as serviceWorker from './serviceWorker';
-import { Button, Layout, Menu, Icon, DatePicker } from 'antd';
-const { Header, Content, Footer, Sider } = Layout;
 
 ReactDOM.render(
-  <Router>
+  <BrowserRouter>
     <App />
-  </Router>,
-  document.getElementById('root')
-);
+  </BrowserRouter>, 
+  document.getElementById('root'));
 
 
 // If you want your app to work offline and load faster, you can change
