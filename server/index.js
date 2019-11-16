@@ -19,6 +19,7 @@ app.use(cors());
 
 app.post('/login', (req, res) => {
   const email = req.body.email;
+  // password 부분
   
   db.raw(`INSERT INTO user (email, created_data_time) VALUES ('${email}', now())`)
   .then((response) => {
@@ -30,33 +31,73 @@ app.post('/login', (req, res) => {
   });
 });
 
-app.post('/post', (req, res) => {
-  const paragraph = req.body.paragraph;
-  const affectivity = req.body.affectivity;
+// app.post('/post', (req, res) => {
+//   const paragraph = req.body.paragraph;
+//   const affectivity = req.body.affectivity;
   
-  db.raw(`INSERT INTO post (create_post_date, paragraph, created_data_time) VALUES (now(), '${paragraph}', now())`)
-  .then((response) => {
-    res.status(200).end('OK');
-  })
-  .catch((error) => {
-    console.error(error);
-    res.status.end('FAILED');
-  });
+//   db.raw(`INSERT INTO post (create_post_date, paragraph, created_data_time) VALUES (now(), '${paragraph}', now())`)
+//   .then((response) => {
+//     res.status(200).end('OK');
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//     res.status.end('FAILED');
+//   });
   
-  db.raw(`INSERT INTO post (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
-  .then((response) => {
-    res.status(200).end('OK');
-  })
-  .catch((error) => {
-    console.error(error);
-    res.status(500).end('OK');
-  });
-});
+//   db.raw(`INSERT INTO post (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
+//   .then((response) => {
+//     res.status(200).end('OK');
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//     res.status(500).end('OK');
+//   });
+// });
 
-app.post('/edit_post', (req, res) => {
+// app.post('/edit_post', (req, res) => {
+//   const userId = req.body.user_id;
+//   const postId = req.body.post_id;
+//   const paragraph = req.body.paragraph;
+  
+//   db.raw(`UPDATE post SET id='${userId}', post_id='${postId}', paragraph='${paragraph}', modified_data_time=now()`)
+//   .then((response) => {
+//     res.status(200).end('OK');
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//     res.status.end('FAILED');
+//   });
+// });
+
+// post single
+app.post('/post/:view', (req, res) => {
+  const num = /^\d+?/;
+  const view = req.params.view;
   const userId = req.body.user_id;
   const postId = req.body.post_id;
   const paragraph = req.body.paragraph;
+  const affectivity = req.body.affectivity;
+  
+  if (view.match(num)) {
+    db.raw(`INSERT INTO post (create_post_date, paragraph, created_data_time) VALUES (now(), '${paragraph}', now())`)
+    .then((response) => {
+      res.status(200).end('OK');
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status.end('FAILED');
+    });
+    
+    db.raw(`INSERT INTO post (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
+    .then((response) => {
+      res.status(200).end('OK');
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).end('OK');
+    });
+    return;
+  }
   
   db.raw(`UPDATE post SET id='${userId}', post_id='${postId}', paragraph='${paragraph}', modified_data_time=now()`)
   .then((response) => {
