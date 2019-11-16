@@ -1,0 +1,12 @@
+.App-logo {
+  height: 40px;
+  background: rgba(255,255,255,.2);
+  margin: 16px 28px;
+}
+
+/* 메뉴 부분 thema를 dark => light / default 남색에서 흰색으로 바꿈  */
+@import '~antd/dist/antd.css';
+
+.ant-layout-sider.ant-layout-sider {
+  background-color: #fff;
+}
