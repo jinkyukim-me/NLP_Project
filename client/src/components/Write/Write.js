@@ -1,7 +1,9 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Input, Button, Icon } from 'antd';
+import Emotion from './Emotion'
 import axios from 'axios'
+import LiveClock from './LiveClock';
 
 const { TextArea } = Input;
 
@@ -40,20 +42,27 @@ class Write extends React.Component {
   render() {
     // const { value } = this.state;
 
-    return (
-      <div style={{ padding: 24, background: '#fff', minHeight: 600 }}>
+    return (     
+        <div>
           <TextArea
             placeholder="오늘은 어떤 하루였나요?"
-            style= {{ minHeight: 550, border:'none' }}
+            style= {{ minHeight: 450, border:'none' }}
             value={this.state.text} onChange={this.onChange}
             // autoSize={{ minRows: 25, maxRows: 100 }}
           >
+           
           </TextArea>
+          <div 
+            className='liveClock-container'
+            style={{float: 'right' }}>
+            <LiveClock />
+          </div> 
+          <Emotion />
           <Button onClick={this.flask}>
             <Icon type="save"/>
             <span>저장</span>
-          </Button>     
-      </div>        
+          </Button>
+        </div>           
     )
   }
 }

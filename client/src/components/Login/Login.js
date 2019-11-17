@@ -18,7 +18,7 @@ class NormalLoginForm extends React.Component {
   const { getFieldDecorator } = this.props.form;
   return (
     <>
-      <div>
+      <div style={{ padding: 24, background: '#fff', maxWidth: 350, minHeight: 600, align: 'center' }}>
         <Form 
           onSubmit={this.handleSubmit} 
           className="login-form"
