@@ -53,37 +53,37 @@ export default class App extends Component {
       <>
         <Layout>
           
-          <Sider breakpoint="lg" collapsedWidth="0" onBreakpoint={broken => { console.log(broken); }} onCollapse={(collapsed, type) => { console.log(collapsed, type); }} >
+          <Sider breakpoint="lg" collapsedWidth="0" onBreakpoint={broken => { console.log(broken); }} onCollapse={(collapsed, type) => { console.log(collapsed, type); }} className="one-sidebar" >
             <div className="logo" />
-              <Menu theme="light" mode="inline">
-                <Menu.Item key="1">
-                  <Link to="/write">
-                    <Icon type="edit" />
-                    <span className="nav-text">쓰기</span>
-                  </Link>
-                </Menu.Item>              
-                <SubMenu key="Sub1" title={ <span> <Icon type="read" /> <span>읽기</span> </span> } >
-                  <Menu.Item key="2">
-                    <DatePicker />
-                  <span className="nav-text"></span>
-                  </Menu.Item>
-                </SubMenu>
-                <Menu.Item key="3">
-                  <Link to="">
-                    <Icon type="search" />
-                    <span className="nav-text">찾기</span>
-                  </Link>
+            <Menu theme="light" mode="inline" className="one-nav">
+              <Menu.Item key="1">
+                <Link to="/write">
+                  <Icon type="edit" />
+                  <span className="nav-text">쓰기</span>
+                </Link>
+              </Menu.Item>              
+              <SubMenu key="Sub1" title={ <span> <Icon type="read" /> <span>읽기</span> </span> } >
+                <Menu.Item key="2">
+                  <DatePicker />
+                <span className="nav-text"></span>
                 </Menu.Item>
-                <Menu.Item key="4">
-                  <Link to="/login">
-                    <Icon type="login" />
-                    <span className="nav-text">로그인</span>
-                  </Link>
-                </Menu.Item>
-              </Menu>
+              </SubMenu>
+              <Menu.Item key="3">
+                <Link to="">
+                  <Icon type="search" />
+                  <span className="nav-text">찾기</span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="4">
+                <Link to="/login">
+                  <Icon type="login" />
+                  <span className="nav-text">로그인</span>
+                </Link>
+              </Menu.Item>
+            </Menu>
           </Sider>
           
-          <Layout>
+          <Layout className="one-main">
             <HeaderLayout />
             
             <Content className="Content-section-layout">

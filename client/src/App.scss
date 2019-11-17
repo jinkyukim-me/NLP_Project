@@ -1,0 +1,30 @@
+.one-sidebar {
+  height: 100vh;
+}
+
+.one-nav {
+  height: 100%;
+}
+
+.one-main {
+  height: 100vh;
+  background-color: #fff;
+}
+
+.one-container {
+  padding: 3em;
+  height: 95%;
+}
+
+.one-content {
+  height: 100%;
+  clear: both;
+  
+  .btn-submit {
+    float: right;
+  }
+}
+
+.one-txtarea {
+  height: 100%;
+}
