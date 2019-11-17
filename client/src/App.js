@@ -57,7 +57,7 @@ export default class App extends Component {
             <div className="logo" />
             <Menu theme="light" mode="inline" className="one-nav">
               <Menu.Item key="1">
-                <Link to="/write">
+                <Link to="/post/write">
                   <Icon type="edit" />
                   <span className="nav-text">쓰기</span>
                 </Link>
@@ -89,7 +89,7 @@ export default class App extends Component {
             <Content className="Content-section-layout one-content">
               <Switch>
                 <Route exact path="/" component={Home} />
-                <Route path="/write" component={Write} />
+                <Route path="/post/write" component={Write} />
                 {/* <Route path="/read" component={Read} /> */}
                 <Route path="/login" component={NormalLoginForm} />
                 <Route component={NotFound} />

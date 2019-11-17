@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 // import './index.css';
-import { Input } from 'antd';
+import { Input, Button } from 'antd';
 
 const { TextArea } = Input;
 
@@ -18,14 +18,10 @@ class Write extends React.Component {
     const { value } = this.state;
 
     return (
-      <div>
-        <section className="Content-section-layout">
-          <TextArea
-            placeholder="...그래서 오늘은 어땠어?"
-            autoSize={{ minRows: 2, maxRows: 6 }}
-          />
-        </section>        
-      </div>        
+      <div className="one-post-write">
+        <TextArea placeholder="...그래서 오늘은 어땠어?" className="one-textarea" />
+        <Button type="primary" className="btn btn-submit">저장</Button>
+      </div>
     )
   }
 }
