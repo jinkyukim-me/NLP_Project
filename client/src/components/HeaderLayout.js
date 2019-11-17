@@ -7,7 +7,7 @@ const { Header } = Layout;
 class HeaderLayout extends Component {
   render() {
     return (
-      <Header style={{ background: '#fff', padding: 0 }} >
+      <Header className="one-header">
         <div style={{ fontSize: "XX-large", textAlign: 'center'}}>1sentence </div>
       </Header>
     );

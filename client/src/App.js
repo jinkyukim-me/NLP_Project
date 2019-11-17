@@ -86,7 +86,7 @@ export default class App extends Component {
           <Layout className="one-main">
             <HeaderLayout />
             
-            <Content className="Content-section-layout">
+            <Content className="Content-section-layout one-content">
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/write" component={Write} />
@@ -96,7 +96,7 @@ export default class App extends Component {
               </Switch>
             </Content>
               
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Footer style={{ textAlign: 'center' }} className="footer">Ant Design ©2018 Created by Ant UED</Footer>
           </Layout>
         </Layout>
       </>

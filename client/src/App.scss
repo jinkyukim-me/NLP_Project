@@ -1,3 +1,36 @@
+// layout
+.flex {
+  display: flex;
+}
+.grid {
+  display: grid;
+}
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+// position
+.position-center {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.position-vertical-center {
+	top: 50%;
+	transform: translateY(-50%);
+}
+.position-horizontal-center {
+	left: 50%;
+	transform: translateX(-50%);
+}
+.position-full-page {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
 .one-sidebar {
   height: 100vh;
 }
@@ -11,20 +44,26 @@
   background-color: #fff;
 }
 
-.one-container {
-  padding: 3em;
-  height: 95%;
+.one-header {
+  background-color: #f0f2f5;
 }
 
-.one-content {
+.one-welcome {
+  overflow: hidden;
+  position: relative;
   height: 100%;
-  clear: both;
   
-  .btn-submit {
-    float: right;
+  .txt {
+    position: relative;
+    z-index: 10;
+    font-weight: lighter;
+    font-size: 2.4rem;
   }
-}
-
-.one-txtarea {
-  height: 100%;
+  
+  .img {
+    position: absolute;
+    z-index: 1;
+    width: auto;
+    height: 100%;
+  }
 }
