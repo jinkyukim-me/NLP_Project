@@ -1,30 +1,58 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-// import './index.css';
-import { Input } from 'antd';
+import { Input, Button, Icon } from 'antd';
+import axios from 'axios'
 
 const { TextArea } = Input;
 
 class Write extends React.Component {
-  state = {
-    value: '',
-  };
+  constructor(props) {
+    super(props)
+     this.state = {
+      text: ""
+    }
 
-  onChange = ({ target: { value } }) => {
-    this.setState({ value });
-  };
+    this.onChange = this.onChange.bind(this)
+    this.flask = this.flask.bind(this)
+  }
+
+  // onChange = ({ target: { value } }) => {
+  //   this.setState({ value });
+  // };
+
+
+  onChange(event) {
+    this.setState({
+      text: event.target.value
+    })
+  }
+   
+  flask(event) {
+    axios.post("http:54.180.26.21/:8080/summary", {
+      text: [this.state.text]
+    })
+    .then((response) => {
+      console.log(response.data)
+      alert(response.data.onesentence)
+    })
+  }
 
   render() {
-    const { value } = this.state;
+    // const { value } = this.state;
 
     return (
-      <div>
-        <section className="Content-section-layout">
+      <div style={{ padding: 24, background: '#fff', minHeight: 600 }}>
           <TextArea
-            placeholder="...그래서 오늘은 어땠어?"
-            autoSize={{ minRows: 2, maxRows: 6 }}
-          />
-        </section>        
+            placeholder="오늘은 어떤 하루였나요?"
+            style= {{ minHeight: 550, border:'none' }}
+            value={this.state.text} onChange={this.onChange}
+            // autoSize={{ minRows: 25, maxRows: 100 }}
+          >
+          </TextArea>
+          <Button onClick={this.flask}>
+            <Icon type="save"/>
+            <span>저장</span>
+          </Button>     
       </div>        
     )
   }
