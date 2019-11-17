@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css'
-import { Layout, Menu, Icon, DatePicker } from 'antd';
+import { Layout, Menu, Icon, DatePicker, Button } from 'antd';
 import './Home.css'
 import axios from 'axios';
 
@@ -45,18 +45,18 @@ class Home extends Component {
   render() {
     return (
       <>  
-        <section className="Content-section-layout">
-          <Content style={{ margin: '24px 16px 0' }}>
-            <div style={{ padding: 24, background: '#fff', minHeight: 600 }}>
+        <section className="Content-section-layout one-container">
+          <Content style={{ margin: '24px 16px 0' }} className="one-content">
+            <div style={{ padding: 24, background: '#fff', minHeight: 600 }} className="one-txtarea">
               <input type="textarea" style={{width: "300"}} value={this.state.text} onChange={this.onChange} />
               <span>오늘은 어떤 하루였나요?</span><br/>
               <span>당신의 이야기를 한줄로 정리해드립니다.</span><br/>
               <span>...1sentence...</span>
             </div>
-            <button onClick={this.flask}>저장</button>
+            <Button type="primary" onClick={this.flask} className="btn-submit">저장</Button>
           </Content>
         </section>
-    </>
+      </>
     )
   }
 }
