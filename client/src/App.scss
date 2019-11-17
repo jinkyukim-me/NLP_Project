@@ -82,3 +82,19 @@
     font-size: 1.6rem;
   }
 }
+
+.one-login {
+  height: 100%;
+  
+  .shortcut {
+    justify-content: space-evenly;
+  }
+  
+  .one-input-email {
+    margin-bottom: 0;
+  }
+  
+  .one-input-pw {
+    margin-bottom: 0.75em;
+  }
+}
