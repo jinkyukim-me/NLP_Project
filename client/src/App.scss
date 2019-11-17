@@ -66,4 +66,19 @@
     width: auto;
     height: 100%;
   }
+  
+  .btn-wrap {
+    position: absolute;
+    top: 71%;
+    z-index: 1;
+    width: 3.65em;
+    height: 3.65em;
+  }
+  
+  .btn-shortcut {
+    width: 2em;
+    min-width: auto;
+    height: 2em;
+    font-size: 1.6rem;
+  }
 }

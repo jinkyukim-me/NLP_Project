@@ -27,6 +27,9 @@ class Home extends Component {
         <div className="container one-welcome flex flex-center">
           <div className="txt">{randomTxt()}</div>
           <img src={`images/${randomImg()}.jpg`} alt="" className="img position-center" />
+          <Link to="/post/write" className="btn-wrap">
+            <Button shape="circle" icon="right-circle" className="btn btn-shortcut" />
+          </Link>
         </div>
       </>
     )
