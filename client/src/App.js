@@ -89,7 +89,7 @@ export default class App extends Component {
             <Content className="Content-section-layout one-content">
               <Switch>
                 <Route exact path="/" component={Home} />
-                <Route path="/write" component={Write} />
+                <Route path="/post/write" component={Write} />
                 {/* <Route path="/read" component={Read} /> */}
                 <Route path="/login" component={NormalLoginForm} />
                 <Route component={NotFound} />

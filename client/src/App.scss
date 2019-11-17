@@ -98,3 +98,18 @@
     margin-bottom: 0.75em;
   }
 }
+
+.one-post-write {
+  height: 100%;
+  padding: 9% 7%;
+  clear: both;
+  
+  .one-textarea {
+    height: 100%;
+    margin-bottom: 1.5em;
+  }
+  
+  .btn-submit {
+    float: right;
+  }
+}
