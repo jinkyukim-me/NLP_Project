@@ -62,7 +62,7 @@ export default class App extends Component {
                   <Icon type="edit" />
                   <span className="nav-text">쓰기</span>
                 </Link>
-              </Menu.Item>              
+              </Menu.Item>
               <SubMenu key="Sub1" title={ <span> <Icon type="read" /> <span>읽기</span> </span> } >
                 <Menu.Item key="2">
                   <DatePicker />
@@ -76,6 +76,12 @@ export default class App extends Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="4">
+                <Link to="/setting">
+                  <Icon type="setting" />
+                  <span className="nav-text">설정</span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="5">
                 <Link to="/login">
                   <Icon type="login" />
                   <span className="nav-text">로그인</span>
@@ -93,7 +99,7 @@ export default class App extends Component {
                 <Route path="/post/write" component={Write} />
                 {/* <Route path="/read" component={Read} /> */}
                 <Route path="/login" component={NormalLoginForm} />
-                <Route path="/settings" component={settings} />
+                <Route path="/setting" component={settings} />
                 <Route component={NotFound} />
               </Switch>
             </Content>
