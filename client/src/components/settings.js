@@ -108,7 +108,7 @@ class settings extends Component {
           })(<Input.Password onBlur={this.handleConfirmBlur} />)}
         </Form.Item>
         <Form.Item {...tailFormItemLayout} className="btn-wrap flex">
-          <Button type="primary" htmlType="submit" className="btn btn-register">
+          <Button type="primary" htmlType="submit" className="btn btn-submit">
             변경
           </Button>
           <Button className="btn btn-unsubscribe">
@@ -120,6 +120,6 @@ class settings extends Component {
   }
 }
 
-const WrappedRegistrationForm = Form.create({ name: 'register' })(settings);
+const WrappedSettingsForm = Form.create({ name: 'register' })(settings);
 
-export default WrappedRegistrationForm;
+export default WrappedSettingsForm;
