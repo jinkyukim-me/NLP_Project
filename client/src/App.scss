@@ -113,3 +113,28 @@
     float: right;
   }
 }
+
+.one-settings {
+  flex-direction: column;
+  height: 100%;
+  
+  .ant-form-item {
+    width: 400px;
+    transform: translateX(-14%);
+  }
+  
+  .btn-wrap {
+    .ant-form-item-control-wrapper {
+      width: 100%;
+      margin-left: 0;
+    }
+    
+    .ant-form-item-children {
+      margin-left: 133px;
+    }
+    
+    .btn-register {
+      margin-right: 0.8em;
+    }
+  }
+}

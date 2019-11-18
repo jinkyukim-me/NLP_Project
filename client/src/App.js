@@ -5,6 +5,7 @@ import './App.css';
 import HeaderLayout from './components/HeaderLayout'
 import Home from './components/Home/Home'
 import Write from './components/Write/Write';
+import settings from './components/settings';
 import { Route, Switch, Link } from 'react-router-dom'
 import NormalLoginForm from './components/NormalLoginForm/Login';
 import Read from './components/Read/Read';
@@ -92,6 +93,7 @@ export default class App extends Component {
                 <Route path="/post/write" component={Write} />
                 {/* <Route path="/read" component={Read} /> */}
                 <Route path="/login" component={NormalLoginForm} />
+                <Route path="/settings" component={settings} />
                 <Route component={NotFound} />
               </Switch>
             </Content>
