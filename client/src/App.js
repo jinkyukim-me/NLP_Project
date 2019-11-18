@@ -1,24 +1,26 @@
 import React, { Component } from 'react'
 import './App.scss'
 import Home from './components/Home/Home'
+import HeaderLayout from './components/HeaderLayout'
 import Write from './components/Post/Write/Write'
 import { Route, Switch, Link } from 'react-router-dom'
 import NormalLoginForm from './components/Login/Login'
-import { Layout, Menu, Icon, DatePicker } from 'antd'
+import { Button, Layout, Menu, Icon, DatePicker } from 'antd'
 import PostList from './components/Post/PostList/PostList'
 import NotFound from './components/NotFound'
-// import axios from 'axios'
+import axios from 'axios'
 
-const { Sider, Header, Content, Footer } = Layout
+const { Sider, Content, Footer } = Layout
 const { SubMenu } = Menu
 const { MonthPicker } = DatePicker;
 
 export default class App extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
       collapsed: false,
-      date: "",
+      date: ""
     }
     this.onChange = this.onChange.bind(this)
   }
@@ -40,7 +42,7 @@ export default class App extends Component {
     return (
       <>  
       {/* Sider, Header, Footer는 모든 화면에 보여진다.  */}
-        <Layout>
+        <Layout>          
           <Sider
             breakpoint="lg"
             collapsedWidth="0"
@@ -52,7 +54,7 @@ export default class App extends Component {
             }}
             className="one-sidebar"
           >
-            <div className="logo" />
+            {/* <div className="logo" /> */}
             <Menu theme="light" mode="inline" className="one-nav">
               <Menu.Item key="1">
                 <Link to="/post/write">
@@ -98,12 +100,6 @@ export default class App extends Component {
                 <span className="nav-text"></span>
                 </Menu.Item>            
               </SubMenu>              
-              {/* <Menu.Item key="3">
-                <Link to="/summary">
-                  <Icon type="edit" />
-                  <span className="nav-text">요약</span>
-                </Link>
-              </Menu.Item> */}
               <Menu.Item key="4">
                 <Link to="/setting">
                   <Icon type="setting" />
@@ -118,25 +114,23 @@ export default class App extends Component {
               </Menu.Item>
             </Menu>
           </Sider>
-          <Layout>
-            <Header style={{ background: '#fff', padding: 0 }} >
-              <div style={{ fontSize: "XX-large", textAlign: 'center'}}>1sentence </div>
-            </Header>           
-            <Content style={{ margin: '24px 16px 0' }}>
-              <div style={{ padding: 24, background: '#fff', minHeight: 600 }}>
+          <Layout className="one-main">
+            <HeaderLayout />       
+            <Content className="Content-section-layout one-content">
+              {/* <div style={{ padding: 24, background: '#fff', minHeight: 600 }}> */}
                 {/* content 영역만 switch 되며 화면에 보여진다.                 */}
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/post/write" component={Write} />
-              <Route path="/post" component={PostList} />
-              <Route path="/login" component={NormalLoginForm} />
-              {/* 읽기 기능 구현 후 추가 예정
-              <Route path="/post/:year/:month/:day" component={Post} />
-              <Route path="/post/:year/:month" component={} />
-              <Route path="/post/:year" component={} /> */}
-              <Route component={NotFound} />
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route path="/post/write" component={Write} />
+                <Route path="/post" component={PostList} />
+                <Route path="/login" component={NormalLoginForm} />
+                {/* 읽기 기능 구현 후 추가 예정
+                <Route path="/post/:year/:month/:day" component={Post} />
+                <Route path="/post/:year/:month" component={} />
+                <Route path="/post/:year" component={} /> */}
+                <Route component={NotFound} />
               </Switch>
-              </div>
+                {/* </div> */}
             </Content>
             <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
           </Layout>

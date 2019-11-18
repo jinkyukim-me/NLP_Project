@@ -4,6 +4,8 @@ import Emotion from './Emotion'
 import axios from 'axios'
 import LiveClock from './LiveClock'
 
+const { TextArea } = Input
+
 class Write extends Component {
   constructor(props) {
     super(props)
@@ -39,30 +41,29 @@ class Write extends Component {
   render() {
     // const { value } = this.state
 
-    const { TextArea } = Input
     return (     
-      <div>
-          <div className="one-post-write">
-            <TextArea 
-              placeholder="...그래서 오늘은 어땠어?" 
-              className="one-textarea" 
-              value={this.state.text} 
-              onChange={this.onChange}
-            />
-          <div 
-            className='liveClock-container'
-            style={{float: 'right' }}>
-            <LiveClock />
-          </div> 
+      <div className="one-post-write">
+        <div 
+          className="one-liveClock-container"
+          >
+          <LiveClock />
+        </div> 
+        <TextArea 
+          placeholder="...그래서 오늘은 어땠어?"            
+          value={this.state.text} 
+          onChange={this.onChange}
+          className="one-textarea"
+        />
+        <div className="one-post-btn-container flex">
           <Emotion />
-            <Button type="primary" 
-              className="btn btn-submit"
-              onClick={this.flask}
-            >
-            저장
-            </Button>
-          </div>
-      </div>           
+          <Button type="primary" 
+            className="btn btn-submit"
+            onClick={this.flask}
+          >
+          저장
+          </Button>
+        </div>
+      </div>        
     )
   }
 }
