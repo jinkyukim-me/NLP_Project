@@ -5,7 +5,8 @@ import './App.css';
 import HeaderLayout from './components/HeaderLayout'
 import Home from './components/Home/Home'
 import Write from './components/Write/Write';
-import settings from './components/settings';
+import settings from './components/Settings';
+import SingUp from './components/SignUp';
 import { Route, Switch, Link } from 'react-router-dom'
 import NormalLoginForm from './components/NormalLoginForm/Login';
 import Read from './components/Read/Read';
@@ -100,6 +101,7 @@ export default class App extends Component {
                 {/* <Route path="/read" component={Read} /> */}
                 <Route path="/login" component={NormalLoginForm} />
                 <Route path="/setting" component={settings} />
+                <Route path="/signup" component={SingUp} />
                 <Route component={NotFound} />
               </Switch>
             </Content>

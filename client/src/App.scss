@@ -138,3 +138,18 @@
     }
   }
 }
+
+.one-signup {
+  flex-direction: column;
+  height: 100%;
+  
+  .ant-form-item {
+    width: 400px;
+    transform: translateX(-14%);
+  }
+  
+  .one-checkbox-wrap,
+  .btn-wrap {
+    margin-bottom: 0;
+  }
+}
