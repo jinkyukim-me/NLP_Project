@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import 'antd/dist/antd.css';
-import { Form, Input, Select, Button, AutoComplete } from 'antd';
+import { Form, Input, Select, Checkbox, Button, AutoComplete } from 'antd';
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
 
-class settings extends Component {
+class SignUpForm extends Component {
   state = {
     confirmDirty: false,
     autoCompleteResult: [],
@@ -81,8 +79,22 @@ class settings extends Component {
     };
 
     return (
-      <Form {...formItemLayout} onSubmit={this.handleSubmit} className="one-settings flex flex-center">
-        <Form.Item label="Password" className="one-input-pw" hasFeedback>
+      <Form {...formItemLayout} onSubmit={this.handleSubmit} className="one-signup flex flex-center">
+        <Form.Item label="E-mail">
+          {getFieldDecorator('email', {
+            rules: [
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
+                required: true,
+                message: 'Please input your E-mail!',
+              },
+            ],
+          })(<Input />)}
+        </Form.Item>
+        <Form.Item label="Password" hasFeedback>
           {getFieldDecorator('password', {
             rules: [
               {
@@ -95,7 +107,7 @@ class settings extends Component {
             ],
           })(<Input.Password />)}
         </Form.Item>
-        <Form.Item label="Confirm Password" className="one-input-confirm-pw" hasFeedback>
+        <Form.Item label="Confirm Password" hasFeedback>
           {getFieldDecorator('confirm', {
             rules: [
               {
@@ -108,14 +120,18 @@ class settings extends Component {
             ],
           })(<Input.Password onBlur={this.handleConfirmBlur} />)}
         </Form.Item>
-        <Form.Item {...tailFormItemLayout} className="btn-wrap flex">
-          <Button type="primary" htmlType="submit" className="btn btn-submit">
-            변경
-          </Button>
-          <Button className="btn btn-unsubscribe">
-            <Link to="/unsubscribe">
-              회원 탈퇴
-            </Link>
+        <Form.Item {...tailFormItemLayout} className="one-checkbox-wrap">
+          {getFieldDecorator('agreement', {
+            valuePropName: 'checked',
+          })(
+            <Checkbox>
+              개인정보 제공에 동의합니다.
+            </Checkbox>,
+          )}
+        </Form.Item>
+        <Form.Item {...tailFormItemLayout} className="btn-wrap">
+          <Button type="primary" htmlType="submit" className="btn btn-signup">
+            가입
           </Button>
         </Form.Item>
       </Form>
@@ -123,6 +139,6 @@ class settings extends Component {
   }
 }
 
-const WrappedSettingsForm = Form.create({ name: 'register' })(settings);
+const WrappedSignUpForm = Form.create({ name: 'register' })(SignUpForm);
 
-export default WrappedSettingsForm;
+export default WrappedSignUpForm;

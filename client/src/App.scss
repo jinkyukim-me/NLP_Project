@@ -31,6 +31,10 @@
 	left: 0;
 }
 
+.line-break {
+	display: block;
+}
+
 .one-sidebar {
   height: 100vh;
 }
@@ -151,5 +155,23 @@
   .one-checkbox-wrap,
   .btn-wrap {
     margin-bottom: 0;
+  }
+}
+
+.one-unsubscribe {
+  flex-direction: column;
+  height: 100%;
+  
+  .txt {
+    margin-bottom: 3em;
+  }
+  
+  .line-break {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+  
+  .btn-cancel {
+    margin-right: 0.8em;
   }
 }
