@@ -23,8 +23,8 @@ class Emotion extends Component {
           </Button>        
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Emotion;
+export default Emotion

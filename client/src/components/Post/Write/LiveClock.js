@@ -15,4 +15,4 @@ class LiveClock extends Component {
     )
   }
 }
-export default LiveClock;
+export default LiveClock

@@ -62,3 +62,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* ant design css를 import 합니다. */
+@import '~antd/dist/antd.css';
+
+/* 메뉴 부분 thema를 dark => light / default 남색에서 흰색으로 바꿈  */
+.ant-layout-sider.ant-layout-sider {
+  background-color: #fff;
+}
