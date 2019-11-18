@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import { Form, Input, Select, Button, AutoComplete } from 'antd';
 
@@ -112,7 +113,9 @@ class settings extends Component {
             변경
           </Button>
           <Button className="btn btn-unsubscribe">
-            회원 탈퇴
+            <Link to="/unsubscribe">
+              회원 탈퇴
+            </Link>
           </Button>
         </Form.Item>
       </Form>

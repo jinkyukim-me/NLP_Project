@@ -7,6 +7,7 @@ import Home from './components/Home/Home'
 import Write from './components/Write/Write';
 import settings from './components/Settings';
 import SingUp from './components/SignUp';
+import unsubscribe from './components/Unsubscribe';
 import { Route, Switch, Link } from 'react-router-dom'
 import NormalLoginForm from './components/NormalLoginForm/Login';
 import Read from './components/Read/Read';
@@ -102,6 +103,7 @@ export default class App extends Component {
                 <Route path="/login" component={NormalLoginForm} />
                 <Route path="/setting" component={settings} />
                 <Route path="/signup" component={SingUp} />
+                <Route path="/unsubscribe" component={unsubscribe} />
                 <Route component={NotFound} />
               </Switch>
             </Content>
