@@ -3,6 +3,8 @@ import { Input, Button } from 'antd'
 import Emotion from './Emotion'
 import axios from 'axios'
 import LiveClock from './LiveClock'
+import { Link } from 'react-router-dom'
+import saveConfirmBtn from './saveConfirmBtn'
 
 const { TextArea } = Input
 
@@ -56,12 +58,14 @@ class Write extends Component {
         />
         <div className="one-post-btn-container flex">
           <Emotion />
+          {/* <Link to="/post/write/confirm" component={saveConfirmBtn} /> */}
           <Button type="primary" 
             className="btn btn-submit"
             onClick={this.flask}
           >
           저장
-          </Button>
+            </Button>
+          {/* </Link> */}
         </div>
       </div>        
     )

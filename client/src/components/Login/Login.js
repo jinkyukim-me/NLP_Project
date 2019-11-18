@@ -38,7 +38,7 @@ class NormalLoginForm extends Component {
                 로그인
               </Button>            
               <div className="shortcut flex">
-                <Link to="">회원가입</Link>
+                <Link to="/signup">회원가입</Link>
                 <Link to="">비밀번호 찾기</Link>
               </div>
             </Form.Item>

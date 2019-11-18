@@ -8,7 +8,11 @@ import NormalLoginForm from './components/Login/Login'
 import { Button, Layout, Menu, Icon, DatePicker } from 'antd'
 import PostList from './components/Post/PostList/PostList'
 import NotFound from './components/NotFound'
+import settings from './components/setting'
+import SingUp from './components/Login/SignUp'
+import unsubscribe from './components/Login/Unsubscribe'
 import axios from 'axios'
+
 
 const { Sider, Content, Footer } = Layout
 const { SubMenu } = Menu
@@ -124,6 +128,9 @@ export default class App extends Component {
                 <Route path="/post/write" component={Write} />
                 <Route path="/post" component={PostList} />
                 <Route path="/login" component={NormalLoginForm} />
+                <Route path="/setting" component={settings} />
+                <Route path="/signup" component={SingUp} />
+                <Route path="/unsubscribe" component={unsubscribe} />
                 {/* 읽기 기능 구현 후 추가 예정
                 <Route path="/post/:year/:month/:day" component={Post} />
                 <Route path="/post/:year/:month" component={} />
