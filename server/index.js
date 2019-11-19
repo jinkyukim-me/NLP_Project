@@ -16,7 +16,6 @@ const db = knex({
   }
 });
 
-app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(cors());
 
@@ -38,8 +37,8 @@ app.post('/signup', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const salt = crypto.randomBytes(64).toString('hex');
-  const encrypt_pass = crypto.createHash('sha512').update(password + salt).digest('hex');
-  console.log(`password = ${password}`);
+  const encrypt_pass = crypto.createHash('sha512').update(password + salt).digest('base64');
+  console.log(`password = ${encrypt_pass}`);
   
   
   db.raw(`INSERT INTO user (email, salt, encrypt_pass, created_data_time) VALUES ('${email}', '${salt}', '${encrypt_pass}', now())`)
