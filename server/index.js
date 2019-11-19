@@ -2,6 +2,8 @@ const express = require('express');
 const knex = require('knex');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
+const crypto = require('crypto');
+
 
 const app = express();
 const db = knex({
@@ -14,14 +16,33 @@ const db = knex({
   }
 });
 
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(cors());
 
 app.post('/login', (req, res) => {
   const email = req.body.email;
-  // password 부분
+  const password = req.body.password;
   
-  db.raw(`INSERT INTO user (email, created_data_time) VALUES ('${email}', now())`)
+  // db.raw(`INSERT INTO user (email, password, created_data_time) VALUES ('${email}', ${encrypt_password}, now())`)
+  // .then((response) => {
+  //   res.status(200).end('OK');
+  // })
+  // .catch((error) => {
+  //   console.error(error);
+  //   res.status(500).end('FAILED');
+  // });
+});
+
+app.post('/signup', (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const salt = crypto.randomBytes(64).toString('hex');
+  const encrypt_pass = crypto.createHash('sha512').update(password + salt).digest('hex');
+  console.log(`password = ${password}`);
+  
+  
+  db.raw(`INSERT INTO user (email, salt, encrypt_pass, created_data_time) VALUES ('${email}', '${salt}', '${encrypt_pass}', now())`)
   .then((response) => {
     res.status(200).end('OK');
   })
