@@ -1,67 +1,84 @@
-import React, { Component } from 'react'
-import { List, Card } from 'antd'
-import axios from 'axios'
+import React, { Component } from 'react';
+import { List, message, Avatar, Spin } from 'antd';
+import reqwest from 'reqwest';
+import InfiniteScroll from 'react-infinite-scroller';
 
-const data = [
-  {
-    create_post_date: '10/24(월)',
-    paragraph: '오늘 생일이다.',
-  },
-  {
-    create_post_date: '10/25(화)',
-    paragraph: '오늘 생일 다음날이다.',
-  },
-  {
-    create_post_date: '10/26(수)',
-    paragraph: '오늘 생일 다다음날이다.',
-  },
-]
+const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 
-class PostList extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      postList: [
-        {
-          create_post_date: "",
-          paragraph: "",
-        }
-      ]
-    }
+class PostsList extends Component {
+  state = {
+    data: [],
+    loading: false,
+    hasMore: true,
+    date: '20191119',
+  };
+
+  componentDidMount() {
+    this.fetchData(res => {
+      this.setState({
+        data: res.results,
+      });
+    });
   }
 
-  componentWillMount() {
-    this.setState({postList: data})
-    // axios.post("http:서버주소/:서버포트/post", {
-    //   startDt: this.props.startDt,
-    //   endDt: this.props.endDt,
-    // })
-    // .then((response) => {
-    //   this.setState({postList: response.data})
-    //   alert(response.data)
-    // })
+  fetchData = callback => {
+    reqwest({
+      url: fakeDataUrl,
+      type: 'json',
+      method: 'get',
+      contentType: 'application/json',
+      success: res => {
+        callback(res);
+      },
+    });
+  };
+
+  handleInfiniteOnLoad = () => {
+    let { data } = this.state;
+    this.setState({
+      loading: true,
+    });
+    if (data.length > 14) {
+      message.warning('Infinite List loaded all');
+      this.setState({
+        hasMore: false,
+        loading: false,
+      });
+      return;
+    }
+    this.fetchData(res => {
+      data = data.concat(res.results);
+      this.setState({
+        data,
+        loading: false,
+      });
+    });
+  };
+  
+  renderItem = (item) => {
+    return (
+      <List.Item key={item.id}>
+        <List.Item.Meta title={<a href="https://ant.design">{item.name.last}</a>} description={this.state.date} className="list-item-wrap" />
+        <div>Content</div>
+      </List.Item>
+    );
   }
 
   render() {
     return (
-      <List
-        grid={{
-        gutter: 16,
-        xs: 1,
-        sm: 2,
-        md: 4,
-        lg: 4,
-        xl: 6,
-        xxl: 3,
-      }}
-      dataSource={this.state.postList}
-      renderItem={item => (
-        <List.Item>
-          <Card title={item.create_post_date}>{item.paragraph}</Card>
-        </List.Item>
-        )}
-      />
-    )
+      <div className="demo-infinite-container one-list">
+        <InfiniteScroll initialLoad={false} pageStart={0} loadMore={this.handleInfiniteOnLoad} hasMore={!this.state.loading && this.state.hasMore} useWindow={false} >
+          <List dataSource={this.state.data} renderItem={this.renderItem} >
+            {this.state.loading && this.state.hasMore && (
+              <div className="demo-loading-container">
+                <Spin />
+              </div>
+            )}
+          </List>
+        </InfiniteScroll>
+      </div>
+    );
   }
 }
-export default PostList
+
+export default PostsList;

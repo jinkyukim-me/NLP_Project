@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import 'antd/dist/antd.css';
 import { Form, Input, Select, Button, AutoComplete } from 'antd';
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
 
-class settings extends Component {
+class Settings extends Component {
   state = {
     confirmDirty: false,
     autoCompleteResult: [],
@@ -112,17 +111,17 @@ class settings extends Component {
           <Button type="primary" htmlType="submit" className="btn btn-submit">
             변경
           </Button>
+          <Link to="/unsubscribe">
           <Button className="btn btn-unsubscribe">
-            <Link to="/unsubscribe">
-              회원 탈퇴
-            </Link>
+              회원 탈퇴        
           </Button>
+          </Link>
         </Form.Item>
       </Form>
     );
   }
 }
 
-const WrappedSettingsForm = Form.create({ name: 'register' })(settings);
+const WrappedSettingsForm = Form.create({ name: 'register' })(Settings);
 
 export default WrappedSettingsForm;

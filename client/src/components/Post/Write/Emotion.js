@@ -5,6 +5,7 @@ class Emotion extends Component {
   render() {
     return(
       <div className="App-Content-Emotion">
+        <p>오늘 기분은??</p>
         <div className='iconList' style={{ padding: 5, background: '#fff', minHeight: 20}}>
           <Button>
             <Icon type="like" />

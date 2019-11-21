@@ -1,73 +1,62 @@
-import React, { Component } from 'react'
-import { Input, Button } from 'antd'
-import Emotion from './Emotion'
-import axios from 'axios'
+import React, { Component } from 'react';
+// import './index.css';
+import { Input, Button, Modal } from 'antd';
 import LiveClock from './LiveClock'
+import Emotion from './Emotion'
 import { Link } from 'react-router-dom'
-import saveConfirmBtn from './saveConfirmBtn'
 
-const { TextArea } = Input
+const { TextArea } = Input;
 
 class Write extends Component {
-  constructor(props) {
-    super(props)
-     this.state = {
-      text: []
-    }
-
-    this.onChange = this.onChange.bind(this)
-    this.flask = this.flask.bind(this)
-  }
-
-  // onChange = ({ target: { value } }) => {
-  //   this.setState({ value });
-  // }
-
-
-  onChange(event) {
+  state = {
+    value: '',
+    visible: false,
+  };
+  
+  showModal = () => {
     this.setState({
-      text: event.target.value
-    })
-  }
-   
-  flask(event) {
-    axios.post("http://54.180.26.21/:8080/summary", {
-      text: [this.state.text]
-    })
-    .then((response) => {
-      console.log(response.data)
-      alert(response.data.onesentence)
-    })
-  }
+      visible: true,
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  onChange = ({ target: { value } }) => {
+    this.setState({ value });
+  };
 
   render() {
-    // const { value } = this.state
+    const { value } = this.state;
 
-    return (     
+    return (
       <div className="one-post-write">
-        <div 
-          className="one-liveClock-container"
-          >
+        <div className="one-liveClock-container">
           <LiveClock />
         </div> 
-        <TextArea 
-          placeholder="...그래서 오늘은 어땠어?"            
-          value={this.state.text} 
-          onChange={this.onChange}
-          className="one-textarea"
-        />
+        <TextArea placeholder="...그래서 오늘은 어땠어?" className="one-textarea" />
         <div className="one-post-btn-container flex">
           <Emotion />
-          {/* <Link to="/post/write/confirm" component={saveConfirmBtn} /> */}
-          <Button type="primary" 
-            className="btn btn-submit"
-            onClick={this.flask}
-          >
-          저장
-            </Button>
-          {/* </Link> */}
+
+          <Button type="primary" onClick={this.showModal} className="btn btn-submit">저장</Button>
+          <Modal title="Basic Modal" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} >
+            <Link to='/post/review'>
+              저장하시겠습니까?
+            </Link>     
+          </Modal>       
         </div>
-      </div>        
+      </div>
     )
   }
 }

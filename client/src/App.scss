@@ -197,3 +197,26 @@
     margin-right: 0.8em;
   }
 }
+
+.one-list {
+  position: relative;
+  top: 50%;
+  margin: 0 5%;
+  transform: translateY(-50%);
+  
+  .ant-list-item-meta-content {
+    display: flex;
+  }
+  
+  .ant-list-item-meta-title {
+    order: 2;
+  }
+  
+  .ant-list-item-meta-description {
+    margin-right: 1em;
+  }
+}
+
+.one-logout-container {
+  height: 100%
+}

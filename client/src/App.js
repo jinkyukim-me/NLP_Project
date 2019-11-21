@@ -8,9 +8,11 @@ import NormalLoginForm from './components/Login/Login'
 import { Button, Layout, Menu, Icon, DatePicker } from 'antd'
 import PostList from './components/Post/PostList/PostList'
 import NotFound from './components/NotFound'
-import settings from './components/setting'
+import Settings from './components/Settings'
 import SingUp from './components/Login/SignUp'
-import unsubscribe from './components/Login/Unsubscribe'
+import Unsubscribe from './components/Login/Unsubscribe'
+import Logout from './components/Login/Logout'
+import Review from './components/Post/Write/Review'
 import axios from 'axios'
 
 
@@ -36,8 +38,7 @@ export default class App extends Component {
   }
 
   onChange(event)  {
-    this.setState({ 
-      date: event.target.value
+    this.setState({      
      })
     // console.log(date, dateString)
   }
@@ -79,7 +80,7 @@ export default class App extends Component {
                   <Link to="/post">
                     <MonthPicker 
                       onChange={this.onChange}
-                      value={this.state.date} 
+                      value={this.state.value} 
                       placeholder="Select month" />                  
                   </Link> 
                 <span className="nav-text"></span>
@@ -97,8 +98,8 @@ export default class App extends Component {
                 <Menu.Item key="3">
                   <Link to="/summary">
                     <DatePicker  
-                      onChange={this.onChange}
                       value={this.state.date}
+                      onChange={this.dateString}
                     />                  
                   </Link> 
                 <span className="nav-text"></span>
@@ -111,9 +112,9 @@ export default class App extends Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="5">
-                <Link to="/login">
-                  <Icon type="login" />
-                  <span className="nav-text">로그인</span>
+                <Link to="/logout">
+                  <Icon type="logout" />
+                  <span className="nav-text">로그아웃</span>
                 </Link>
               </Menu.Item>
             </Menu>
@@ -128,9 +129,12 @@ export default class App extends Component {
                 <Route path="/post/write" component={Write} />
                 <Route path="/post" component={PostList} />
                 <Route path="/login" component={NormalLoginForm} />
-                <Route path="/setting" component={settings} />
+                <Route path="/setting" component={Settings} />
                 <Route path="/signup" component={SingUp} />
-                <Route path="/unsubscribe" component={unsubscribe} />
+                <Route path="/unsubscribe" component={Unsubscribe} />
+                <Route path="/logout" component={Logout} />
+                <Route path="/post/review" component={Review} />
+
                 {/* 읽기 기능 구현 후 추가 예정
                 <Route path="/post/:year/:month/:day" component={Post} />
                 <Route path="/post/:year/:month" component={} />
