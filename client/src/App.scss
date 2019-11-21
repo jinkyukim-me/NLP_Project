@@ -137,6 +137,7 @@
 
   .one-post-btn-container {
     justify-content: space-between;
+    top: 1em;
   }
 }
 
@@ -219,4 +220,10 @@
 
 .one-logout-container {
   height: 100%
+}
+
+.one-content-notfound {
+  height: 100%;
+  text-align: center;
+
 }

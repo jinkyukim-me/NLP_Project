@@ -111,11 +111,11 @@ class Settings extends Component {
           <Button type="primary" htmlType="submit" className="btn btn-submit">
             변경
           </Button>
-          <Link to="/unsubscribe">
           <Button className="btn btn-unsubscribe">
-              회원 탈퇴        
+            <Link to="/unsubscribe">
+              회원 탈퇴
+            </Link>       
           </Button>
-          </Link>
         </Form.Item>
       </Form>
     );

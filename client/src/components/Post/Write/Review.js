@@ -47,7 +47,7 @@ class Review extends Component {
         <div>
           <Button type="primary" onClick={this.showModal} className="btn btn-delete">삭제</Button>
             <Modal title="Basic Modal" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} >
-                <p>정말 삭제하시겠습니까?</p>
+              <p>정말 삭제하시겠습니까?</p>
             </Modal>
           <Button type="primary" className="btn btn-submit" onClick={this.state}>
             <Link to="/post">목록으로</Link> 

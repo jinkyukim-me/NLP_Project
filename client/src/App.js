@@ -115,6 +115,7 @@ export default class App extends Component {
                 <Link to="/logout">
                   <Icon type="logout" />
                   <span className="nav-text">로그아웃</span>
+   {/* 로그아웃 클릭시 로그인 버튼으로 전환 및 연동 부분 추가 */}
                 </Link>
               </Menu.Item>
             </Menu>
@@ -133,8 +134,8 @@ export default class App extends Component {
                 <Route path="/signup" component={SingUp} />
                 <Route path="/unsubscribe" component={Unsubscribe} />
                 <Route path="/logout" component={Logout} />
-                <Route path="/post/review" component={Review} />
-
+                <Route path="/post/:" component={Review} />
+{/* 글 저장 후 보여질 페이지의 경로를 확인해주세요. '/post/:숫자'로 하기로 했던 것 같은데...ㅎ */}
                 {/* 읽기 기능 구현 후 추가 예정
                 <Route path="/post/:year/:month/:day" component={Post} />
                 <Route path="/post/:year/:month" component={} />

@@ -42,6 +42,9 @@ class Logout extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
+          {/* 모달 버튼 ok 시 로그아웃 되며, 
+          첫 페이지로 이동 및
+          메뉴의 로그아웃 버튼은 로그인 버튼으로 전환 */}
           <Link to="/">
           로그아웃 하시겠습니까?
           </Link>               
