@@ -2,7 +2,10 @@ import React from 'react';
 import 'antd/dist/antd.css';
 // import './index.css';
 import { Input, Button, Modal } from 'antd';
+<<<<<<< HEAD
 import axios from 'axios';
+=======
+>>>>>>> d60e0d71416719258522adc0df4349036a9cc58a
 
 const { TextArea } = Input;
 
@@ -19,12 +22,16 @@ class Write extends React.Component {
   };
 
   handleOk = e => {
+<<<<<<< HEAD
     const paragraph = e.target.value;
     
+=======
+>>>>>>> d60e0d71416719258522adc0df4349036a9cc58a
     console.log(e);
     this.setState({
       visible: false,
     });
+<<<<<<< HEAD
     
     axios.post('/post/write', {
       paragraph: paragraph,
@@ -35,6 +42,8 @@ class Write extends React.Component {
     .catch((error) => {
       console.error(error);
     });
+=======
+>>>>>>> d60e0d71416719258522adc0df4349036a9cc58a
   };
 
   handleCancel = e => {
