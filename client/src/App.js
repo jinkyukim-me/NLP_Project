@@ -19,21 +19,25 @@ const { SubMenu } = Menu;
 
 
 export default class App extends Component {
-  
-  constructor(props) {
-    super(props)
-     this.state = {
-      collapsed: false,
-      text: ""
-    }
-
-    // this.onChange = this.onChange.bind(this)
-    // this.flask = this.flask.bind(this)
+  state = {
+    collapsed: false,
+    text: "",
+    postDate: 0,
   }
 
   onCollapse = (collapsed) => {
     console.log(collapsed);
     this.setState({ collapsed });
+  }
+  
+  pickedDate = (date, dateString) => {
+    dateString = Number(dateString.replace(/-/g, ''));
+    
+    this.setState({
+      postDate: dateString,
+    }, () => {
+      window.location.assign(`/post/${this.state.postDate}`);
+    });
   }
 
   // onChange(event) {
@@ -68,7 +72,7 @@ export default class App extends Component {
               </Menu.Item>
               <SubMenu key="Sub1" title={ <span> <Icon type="read" /> <span>읽기</span> </span> } >
                 <Menu.Item key="2">
-                  <DatePicker />
+                  <DatePicker onChange={this.pickedDate} />
                 <span className="nav-text"></span>
                 </Menu.Item>
               </SubMenu>
@@ -112,6 +116,7 @@ export default class App extends Component {
                 <Route path="/signup" component={SingUp} />
                 <Route path="/unsubscribe" component={unsubscribe} />
                 <Route path="/list" component={PostsList} />
+                <Route path={`/post/${this.state.postDate}`} component={Read} postDate={this.state.postDate} />
                 <Route component={NotFound} />
               </Switch>
             </Content>
