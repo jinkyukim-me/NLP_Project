@@ -3,6 +3,7 @@ const knex = require('knex');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 const crypto = require('crypto');
+const router = express.Router();
 
 
 const app = express();
@@ -95,11 +96,55 @@ app.post('/post/:view', (req, res) => {
   const view = req.params.view;
   const userId = req.body.user_id;
   const postId = req.body.post_id;
+  const postDate = req.body.postDate;
   const paragraph = req.body.paragraph;
   const affectivity = req.body.affectivity;
   
-  if (view.match(num)) {
-    db.raw(`INSERT INTO post (create_post_date, paragraph, created_data_time) VALUES (now(), '${paragraph}', now())`)
+  if (view === 'write') {
+    console.log(`paragraph = ${paragraph}`);
+    
+    db.raw(`INSERT INTO post (create_post_date, paragraph, created_data_time) VALUES (${postDate}, '${paragraph}', now())`)
+    .then((response) => {
+      res.status(200).end('OK');
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).end('FAILED');
+    });
+    
+    // db.raw(`INSERT INTO post (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
+    // .then((response) => {
+    //   res.status(200).end('OK');
+    // })
+    // .catch((error) => {
+    //   console.error(error);
+    //   res.status(500).end('FAILED');
+    // });
+    return;
+  }
+  // if (view.match(num)) {
+  //   db.raw(`INSERT INTO post (create_post_date, paragraph, created_data_time) VALUES (now(), '${paragraph}', now())`)
+  //   .then((response) => {
+  //     res.status(200).end('OK');
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //     res.status.end('FAILED');
+  //   });
+    
+  //   db.raw(`INSERT INTO post (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
+  //   .then((response) => {
+  //     res.status(200).end('OK');
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //     res.status(500).end('OK');
+  //   });
+  //   return;
+  // }
+  
+  if (view === 'modify') {
+    db.raw(`UPDATE post SET id='${userId}', post_id='${postId}', paragraph='${paragraph}', modified_data_time=now()`)
     .then((response) => {
       res.status(200).end('OK');
     })
@@ -107,26 +152,24 @@ app.post('/post/:view', (req, res) => {
       console.error(error);
       res.status.end('FAILED');
     });
-    
-    db.raw(`INSERT INTO post (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
-    .then((response) => {
-      res.status(200).end('OK');
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).end('OK');
-    });
-    return;
   }
+});
+
+app.get('/post/:view', (req, res) => {
+  const num = /^\d+?/;
+  const view = req.params.view;
   
-  db.raw(`UPDATE post SET id='${userId}', post_id='${postId}', paragraph='${paragraph}', modified_data_time=now()`)
-  .then((response) => {
-    res.status(200).end('OK');
-  })
-  .catch((error) => {
-    console.error(error);
-    res.status.end('FAILED');
-  });
+  if (view.match(num)) {
+    db.raw(`SELECT create_post_date, paragraph FROM post WHERE id=10`)
+    .then((response) => {
+      // console.log(response);
+      res.status(200).send(response[0][0]);
+      // console.log(response[0][0].create_post_date);
+    })
+    .catch ((error) => {
+      res.status(500).end('FAILED');
+    });
+  }
 });
 
 app.listen(9000, () => {
