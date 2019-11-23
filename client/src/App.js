@@ -5,13 +5,16 @@ import HeaderLayout from './components/HeaderLayout'
 import Write from './components/Post/Write/Write'
 import { Route, Switch, Link } from 'react-router-dom'
 import NormalLoginForm from './components/Login/Login'
-import { Button, Layout, Menu, Icon, DatePicker } from 'antd'
+import { Button, Layout, Menu, Icon, DatePicker, Modal } from 'antd'
 import PostList from './components/Post/PostList/PostList'
 import NotFound from './components/NotFound'
 import Settings from './components/Settings'
 import SingUp from './components/Login/SignUp'
 import Unsubscribe from './components/Login/Unsubscribe'
-import Logout from './components/Login/Logout'
+// import Logout from './components/Login/Logout'
+import Read from './components/Read/Read';
+import PostsList from './components/List';
+
 import Review from './components/Post/Write/Review'
 import axios from 'axios'
 
@@ -21,27 +24,53 @@ const { SubMenu } = Menu
 const { MonthPicker } = DatePicker;
 
 export default class App extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      collapsed: false,
-      date: ""
-    }
-    this.onChange = this.onChange.bind(this)
+  state = {
+    collapsed: false,
+    date: "",
+    postDate: 0,
+    visible: false,
   }
 
   onCollapse = (collapsed) => {
     console.log(collapsed)
     this.setState({ collapsed })
-   
   }
+  
+  pickedDate = (date, dateString) => {
+    dateString = Number(dateString.replace(/-/g, ''));
+    
+    this.setState({
+      postDate: dateString,
+    }, () => {
+    });
+  }
+  
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: true,
+    }, () => {
+      window.location.assign(`/`);
+    });
+  };
+  
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+  
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
 
-  onChange(event)  {
-    this.setState({      
-     })
-    // console.log(date, dateString)
-  }
+  // onChange(event)  {
+  //   this.setState({      
+  //    })
+  //   // console.log(date, dateString)
+  // }
 
   render () {
     return (
@@ -80,7 +109,7 @@ export default class App extends Component {
                   <Link to="/post">
                     <MonthPicker 
                       onChange={this.onChange}
-                      value={this.state.value} 
+                      // value={this.state.value} 
                       placeholder="Select month" />                  
                   </Link> 
                 <span className="nav-text"></span>
@@ -98,25 +127,36 @@ export default class App extends Component {
                 <Menu.Item key="3">
                   <Link to="/summary">
                     <DatePicker  
-                      value={this.state.date}
-                      onChange={this.dateString}
+                      // value={this.state.date}
+                      onChange={this.pickedDate}
                     />                  
                   </Link> 
                 <span className="nav-text"></span>
                 </Menu.Item>            
-              </SubMenu>              
+              </SubMenu>    
+              {/* <Menu.Item key="4">
+                <Link to="/list">
+                  <Icon type="unordered-list" />
+                  <span className="nav-text">글 목록</span>
+                </Link>
+              </Menu.Item>           */}
               <Menu.Item key="4">
                 <Link to="/setting">
                   <Icon type="setting" />
                   <span className="nav-text">설정</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="5">
-                <Link to="/logout">
-                  <Icon type="logout" />
-                  <span className="nav-text">로그아웃</span>
-   {/* 로그아웃 클릭시 로그인 버튼으로 전환 및 연동 부분 추가 */}
-                </Link>
+              <Menu.Item key="5" onClick={this.showModal}>
+                <Icon type="logout" />
+                <span className="nav-text">로그아웃</span>
+                <Modal
+                  title="Basic Modal"
+                  visible={this.state.visible}
+                  onOk={this.handleOk}
+                  onCancel={this.handleCancel}
+                >
+                로그아웃 하시겠습니까?
+                </Modal>
               </Menu.Item>
             </Menu>
           </Sider>
@@ -128,13 +168,14 @@ export default class App extends Component {
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/post/write" component={Write} />
-                <Route path="/post" component={PostList} />
                 <Route path="/login" component={NormalLoginForm} />
                 <Route path="/setting" component={Settings} />
                 <Route path="/signup" component={SingUp} />
                 <Route path="/unsubscribe" component={Unsubscribe} />
-                <Route path="/logout" component={Logout} />
-                <Route path="/post/:" component={Review} />
+                {/* <Route path="/logout" component={Logout} /> */}
+                <Route path="/list" component={PostsList} />
+                <Route path={`/post/${this.state.postDate}`} component={Read} postDate={this.state.postDate} />
+                {/* <Route path="/post/:" component={Review} /> */}
 {/* 글 저장 후 보여질 페이지의 경로를 확인해주세요. '/post/:숫자'로 하기로 했던 것 같은데...ㅎ */}
                 {/* 읽기 기능 구현 후 추가 예정
                 <Route path="/post/:year/:month/:day" component={Post} />

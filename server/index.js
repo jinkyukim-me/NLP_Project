@@ -89,7 +89,7 @@ app.post('/signup', (req, res) => {
 //     res.status.end('FAILED');
 //   });
 // });
-
+// HTTP header Authorization => Bearer 1234128asldf-asdflkajsvxc-sdf 
 // post single
 app.post('/post/:view', (req, res) => {
   const num = /^\d+?/;

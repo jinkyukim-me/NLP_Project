@@ -7,7 +7,7 @@ class LiveClock extends Component {
     return(
       <div className="App-Content-Comp-LiveClock"> 
         <Clock 
-          format={'YYYY년 MM월 DD일 HH:mm:ss'} 
+          format={'YYYY년 MM월 DD일 HH:mm'} 
           ticking={true} 
           timezone={'Asia/Seoul'}
         /> 
