@@ -4,6 +4,7 @@ import { Input, Button, Modal } from 'antd';
 import LiveClock from './LiveClock'
 import Emotion from './Emotion'
 import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router'
 
 const { TextArea } = Input;
 
@@ -21,8 +22,9 @@ class Write extends Component {
 
   handleOk = e => {
     console.log(e);
+    this.props.history.push('/list')
     this.setState({
-      visible: true,
+      visible: true
     });
   };
 
@@ -51,7 +53,6 @@ class Write extends Component {
           <Button type="primary" onClick={this.showModal} className="btn btn-submit">저장</Button>
           <Modal title="글이 완성되었습니다." visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} >
             <Link to='/post/:'>
-{/* 저장 modal ok 후 작성된 글 보는 페이지로 이동하는 부분 수정 미완성 */}
               저장하시겠습니까?
             </Link>     
           </Modal>       
@@ -60,4 +61,4 @@ class Write extends Component {
     )
   }
 }
-export default Write
+export default withRouter(Write) 

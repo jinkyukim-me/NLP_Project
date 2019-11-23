@@ -16,9 +16,12 @@ class Unsubscribe extends Component {
             </p>
             <div className="btn-wrap">
               <Button type="primary" className="btn btn-cancel">
-                <Link to="/">취소</Link>
+                <Link to="/setting">취소</Link>
               </Button>
-              <Button className="btn btn-submit">회원탈퇴</Button>
+              <Button className="btn btn-submit">
+                <Link to="/">회원탈퇴</Link>
+                
+              </Button>
             </div>
           </div>
         </div>
