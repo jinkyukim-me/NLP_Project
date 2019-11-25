@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 
 class Unsubscribe extends Component {
+
+  handleClick() { 
+    alert("다시 또 만날 수 있길 바랍니다. 안녕히 가세요.")
+  }
   render() {
     return (
       <>
@@ -18,9 +22,8 @@ class Unsubscribe extends Component {
               <Button type="primary" className="btn btn-cancel">
                 <Link to="/setting">취소</Link>
               </Button>
-              <Button className="btn btn-submit">
-                <Link to="/">회원탈퇴</Link>
-                
+              <Button className="btn btn-submit" onClick={this.handleClick}>
+                <Link to="/">회원탈퇴</Link>                
               </Button>
             </div>
           </div>

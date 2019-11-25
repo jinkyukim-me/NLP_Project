@@ -30,26 +30,31 @@ class Review extends Component {
     });
   };
 
-  onChange = ({ target: { value } }) => {
-    this.setState({ value });
-  };
-
   render() {
-    const { value } = this.state;
 
     return (
       <div className="one-selected-review">
-        <TextArea className="one-selected-textarea" />
-          <span>쓴 글이 저장되어 보여지도록 불러온다. </span>
-        <div className="one-selected-emotion">
-          선택한 emotion아이콘이 보여지도록 불러온다.
+        <div className="one-selected-date-emo-wrapper flex">
+          <Input className="one-selected-date flex"
+            // type="date"
+            border=""
+            placeholder="일기 쓴 날짜가 보여질 예정입니다."
+          >          
+          </Input>
+          <div className="one-selected-emotion flex" type="input">
+            감정
+          </div>
         </div>
-        <div>
-          <Button type="primary" onClick={this.showModal} className="btn btn-delete">삭제</Button>
+        <TextArea className="one-selected-textarea" 
+          placeholder="쓴 글이 불려질 예정입니다.">
+        </TextArea>
+      
+        <div className="one-selected-btnContainer flex">
+          <Button type="dashed" onClick={this.showModal} className="btn btn-delete">삭제</Button>
             <Modal title="Basic Modal" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} >
               <p>정말 삭제하시겠습니까?</p>
             </Modal>
-          <Button type="primary" className="btn btn-submit" onClick={this.state}>
+          <Button type="primary" className="btn btn-submit" >
             <Link to="/post">목록으로</Link> 
           </Button>           
         </div>

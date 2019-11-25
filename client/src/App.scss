@@ -218,12 +218,60 @@
   }
 }
 
-.one-logout-container {
-  height: 100%
-}
 
 .one-content-notfound {
   height: 100%;
   text-align: center;
 
 }
+
+.one-selected-review {
+  height: 100%;
+  padding: 9% 7%;
+  clear: both;
+
+  .one-selected-date-emo-wrapper {
+    flex-direction: row;
+    margin-bottom: 1%;
+
+    .one-selected-date {
+      width: 40%; 
+      display: inline-block;
+    } 
+    .one-selected-emotion {
+      display: inline-block;
+      border: 1em;
+      margin: 0.3em;
+      background: blue;
+    }   
+  }
+  .one-selected-textarea {
+    height: 100%;
+    margin-bottom: 1.5em;
+  }
+  .one-selected-btnContainer {
+    justify-content: space-between;
+    top: 1em;
+  }
+}
+
+//모달 테스트용
+.one-modal {
+  background: rgba(0, 0, 0, 0.25);
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .content {
+    background: white;
+    padding: 1rem;
+    width: 400px;
+    height: auto;
+  }
+}
+
