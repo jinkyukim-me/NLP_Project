@@ -41,7 +41,6 @@ export default class App extends Component {
     
     this.setState({
       postDate: dateString,
-    }, () => {
     });
   }
   
