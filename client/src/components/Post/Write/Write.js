@@ -12,7 +12,7 @@ class Write extends Component {
   state = {
     value: '',
     visible: false,
-    postDate: this.props.postDate,
+    // postDate: this.props.postDate,
   };
   
   showModal = () => {
@@ -40,10 +40,13 @@ class Write extends Component {
   };
 
   handleCancel = e => {
-    console.log(e);
+const { date } = this.props.location.state;
+console.log(e);
     this.setState({
       visible: false,
     });
+    console.log(date);
+    
   };
 
   onChange = ({ target: { value } }) => {

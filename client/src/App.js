@@ -3,7 +3,8 @@ import './App.scss'
 import Home from './components/Home/Home'
 import HeaderLayout from './components/HeaderLayout'
 import Write from './components/Post/Write/Write'
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch, Link, withRouter } from 'react-router-dom'
+// import { withRouter } from 'react-router';
 import NormalLoginForm from './components/Login/Login'
 import { Button, Layout, Menu, Icon, DatePicker, Modal } from 'antd'
 import PostList from './components/Post/PostList/PostList'
@@ -23,11 +24,11 @@ const { Sider, Content, Footer } = Layout
 const { SubMenu } = Menu
 const { MonthPicker } = DatePicker;
 
-export default class App extends Component {
+class App extends Component {
   state = {
     collapsed: false,
     date: "",
-    postDate: 0,
+    // postDate: 0,
     visible: false,
   }
 
@@ -39,17 +40,20 @@ export default class App extends Component {
   pickedDate = (date, dateString) => {
     dateString = Number(dateString.replace(/-/g, ''));
     
-    this.setState({
-      postDate: dateString,
+    this.props.history.push({
+      pathname: '/post/write',
+      state: {date: dateString}
     });
+    
+    // this.setState({
+    //   postDate: dateString,
+    // });
   }
   
   handleOk = e => {
     console.log(e);
     this.setState({
       visible: true,
-    }, () => {
-      window.location.assign(`/`);
     });
   };
   
@@ -124,12 +128,10 @@ export default class App extends Component {
                 }
               >              
                 <Menu.Item key="3">
-                  <Link to="/summary">
-                    <DatePicker  
-                      // value={this.state.date}
-                      onChange={this.pickedDate}
-                    />                  
-                  </Link> 
+                  <DatePicker  
+                    // value={this.state.date}
+                    onChange={this.pickedDate}
+                  />
                 <span className="nav-text"></span>
                 </Menu.Item>            
               </SubMenu>    
@@ -173,7 +175,7 @@ export default class App extends Component {
                 <Route path="/unsubscribe" component={Unsubscribe} />
                 {/* <Route path="/logout" component={Logout} /> */}
                 <Route path="/list" component={PostsList} />
-                <Route path={`/post/${this.state.postDate}`} component={Read} postDate={this.state.postDate} />
+                <Route path={`/post/:view`} component={Read} />
                 {/* <Route path="/post/:" component={Review} /> */}
 {/* 글 저장 후 보여질 페이지의 경로를 확인해주세요. '/post/:숫자'로 하기로 했던 것 같은데...ㅎ */}
                 {/* 읽기 기능 구현 후 추가 예정
@@ -191,3 +193,5 @@ export default class App extends Component {
     )          
   }
 }
+
+export default withRouter(App);

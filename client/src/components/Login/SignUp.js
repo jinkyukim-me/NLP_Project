@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, Checkbox, Button, AutoComplete } from 'antd';
+import axios from 'axios';
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
@@ -12,10 +13,22 @@ class SignUpForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    let values;
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        values = values;
       }
+    });
+    
+    axios.post('http://localhost:9000/signup', {
+      email: '',
+    })
+    .then((response) => {
+      console.log('success');
+    })
+    .catch((error) => {
+      console.error(error);
     });
   };
 
@@ -41,16 +54,16 @@ class SignUpForm extends Component {
     callback();
   };
 
-  handleWebsiteChange = value => {
-    let autoCompleteResult;
-    if (!value) {
-      autoCompleteResult = [];
-    } else {
-      autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-    }
-    this.setState({ autoCompleteResult });
-  };
-
+  // handleWebsiteChange = value => {
+  //   let autoCompleteResult;
+  //   if (!value) {
+  //     autoCompleteResult = [];
+  //   } else {
+  //     autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
+  //   }
+  //   this.setState({ autoCompleteResult });
+  // };
+  
   render() {
     const { getFieldDecorator } = this.props.form;
     const { autoCompleteResult } = this.state;
@@ -85,11 +98,11 @@ class SignUpForm extends Component {
             rules: [
               {
                 type: 'email',
-                message: 'The input is not valid E-mail!',
+                message: '잘못된 형식의 이메일입니다.',
               },
               {
                 required: true,
-                message: 'Please input your E-mail!',
+                message: '이메일을 입력해주세요.',
               },
             ],
           })(<Input />)}
@@ -99,7 +112,7 @@ class SignUpForm extends Component {
             rules: [
               {
                 required: true,
-                message: 'Please input your password!',
+                message: '개인정보 제공에 동의해주세요.',
               },
               {
                 validator: this.validateToNextPassword,
@@ -112,7 +125,7 @@ class SignUpForm extends Component {
             rules: [
               {
                 required: true,
-                message: 'Please confirm your password!',
+                message: '비밀번호가 다릅니다. 다시 확인해주세요.',
               },
               {
                 validator: this.compareToFirstPassword,
