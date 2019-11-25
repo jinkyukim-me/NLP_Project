@@ -31,7 +31,6 @@ class Write extends Component {
     this.setState({
       visible: false,   
     })
-
   };
   // handleOk = e => { 
   //   axios.post("/api/posts", {

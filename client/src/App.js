@@ -22,16 +22,16 @@ const { MonthPicker } = DatePicker;
 
 class App extends Component {
 
-  // constructor(props) {
-  //   super(props)
-    state = {
+  constructor(props) {
+    super(props)
+    this.state = {
       collapsed: false,
-      date: "",
       visible: false,
     }
-  //   this.onChange = this.onChange.bind(this)
-  //   this.showModal = this.showModal.bind(this)
-  // }
+    // this.onChange = this.onChange.bind(this)
+    this.showModal = this.showModal.bind(this)
+    this.handleOk = this.handleOk.bind(this)
+  }
 
   onCollapse = (collapsed) => {
     console.log(collapsed)
@@ -155,8 +155,6 @@ class App extends Component {
           <Layout className="one-main">
             <HeaderLayout />       
             <Content className="Content-section-layout one-content">
-              {/* <div style={{ padding: 24, background: '#fff', minHeight: 600 }}> */}
-                {/* content 영역만 switch 되며 화면에 보여진다.                 */}
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/post/write" component={Write} />
@@ -172,7 +170,6 @@ class App extends Component {
                 <Route path="/post/:year" component={} /> */}
                 <Route component={NotFound} />
               </Switch>
-                {/* </div> */}
             </Content>
             <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
           </Layout>

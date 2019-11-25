@@ -35,19 +35,18 @@ class Review extends Component {
     return (
       <div className="one-selected-review">
         <div className="one-selected-date-emo-wrapper flex">
-          <Input className="one-selected-date flex"
-            // type="date"
-            border=""
-            placeholder="일기 쓴 날짜가 보여질 예정입니다."
-          >          
-          </Input>
+          <p className="one-selected-date flex"
+            // type="date"           
+          >
+          일기 쓴 날짜가 보여질 예정입니다.          
+          </p>
           <div className="one-selected-emotion flex" type="input">
             감정
           </div>
         </div>
-        <TextArea className="one-selected-textarea" 
-          placeholder="쓴 글이 불려질 예정입니다.">
-        </TextArea>
+        <p className="one-selected-textarea"> 
+          쓴 글이 불려질 예정입니다.
+        </p>
       
         <div className="one-selected-btnContainer flex">
           <Button type="dashed" onClick={this.showModal} className="btn btn-delete">삭제</Button>

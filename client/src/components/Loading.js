@@ -4,8 +4,8 @@ import { Spin, Alert } from 'antd';
 render(
   <Spin tip="Loading...">
     <Alert
-      message="Alert message title"
-      description="Further details about the context of this alert."
+      message="서버 열일 중"
+      description="잠시만 기다려주세요~~~"
       type="info"
     />
   </Spin>,
