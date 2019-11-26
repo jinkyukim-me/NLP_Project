@@ -10,9 +10,11 @@ class HeaderLayout extends Component {
     return (
       <>
         <Header className="one-header" style={{ background: '#fff', padding: 0 }} >
-          <Link to="/">
-          <div className="one-logo" style={{ fontSize: "XX-large", textAlign: 'center', color: "#000" }}><span>1sentence</span></div>
-          </Link>
+          <div className="one-logo flex flex-center" >
+            <Link to="/">
+              <span>1sentence</span>
+            </Link>
+          </div>  
         </Header>
       </>
     );

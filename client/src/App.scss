@@ -51,21 +51,20 @@
 .one-header {
   background-color: #f0f2f5;
 
-  .one-logo {
-    cursor: pointer;
-
+  .one-logo {  
+      font-size: 30px; 
+      
     span {
+      cursor: pointer;
       background: linear-gradient(to right, #335e9e, #f8cce1f8);
       font-size: 3rem;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      transition: 0.5s;
-    }
-    
-    :hover span{
-      background: none;
-      transform: scale(1.5,1.5);
-    }
+      transition: 0.5s;      
+      :hover{
+        transform: scale(1.5,1.5);
+      }
+    } 
   }  
 }
 
@@ -237,17 +236,23 @@
     .one-selected-date {
       width: 40%; 
       display: inline-block;
+      background: #ebf8f2;
+      border-radius: 20px;
     } 
     .one-selected-emotion {
       display: inline-block;
       border: 1em;
+      border-radius: 50px;
       margin: 0.3em;
-      background: blue;
+      background: rgb(215, 215, 248);
     }   
   }
   .one-selected-textarea {
     height: 100%;
     margin-bottom: 1.5em;
+    border-radius: 20px;
+    border-color: rgb(243, 200, 200);
+    background-color: rgb(243, 245, 243);
   }
   .one-selected-btnContainer {
     justify-content: space-between;

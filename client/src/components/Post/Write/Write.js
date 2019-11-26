@@ -16,7 +16,7 @@ class Write extends Component {
       visible: false,
       paragraph: "",
     }
-    this.onChange = this.onChange.bind(this)
+    this.paragraphChanged = this.paragraphChanged.bind(this)
   }  
   
   showModal = () => {
@@ -26,28 +26,31 @@ class Write extends Component {
   };
 
 
-  handleOk = e => {    
-    this.props.history.push('/post')
-    this.setState({
-      visible: false,   
+  // handleOk = e => {    
+  //   this.props.history.push('/post')
+  //   this.setState({
+  //     visible: false,   
+  //   })
+  // };
+  handleOk = e => { 
+    axios.post("http://localhost:9000/api/posts", {
+      paragraph: this.state.paragraph,
+      affectivity: this.state.affectivity,
     })
-  };
-  // handleOk = e => { 
-  //   axios.post("/api/posts", {
-  //     paragraph: this.state.paragraph,
-  //     emotion: this.state.emotion,
-  //   })
-  //   .then((response) => {         
-  //     alert("당신의 소중한 하루가 저장되었습니다.")  
-  //     this.props.history.push('/post')
-  //     this.setState({
-  //       visible: false,
-  //     }); 
-  //   })
-  //   .catch((error) => {
-  //     console.error(error)
-  //   })
-  // }
+    .then((response) => {         
+      alert("당신의 소중한 하루가 저장되었습니다.")  
+      this.setState({
+        visible: false,
+        paragraph: "",
+        affectivity: "",     
+      })
+      this.props.history.push('/post')       
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+    console.log(this.state)
+  }
 
   handleCancel = e => {
     console.log(e);
@@ -56,7 +59,7 @@ class Write extends Component {
     });
   };
 
-  onChange(event) {
+  paragraphChanged(event) {
     this.setState({
       paragraph: event.target.value,
     })
@@ -73,7 +76,7 @@ class Write extends Component {
         <TextArea className="one-textarea" 
           placeholder="...그래서 오늘은 어땠어?"
           value={this.state.paragraph}
-          onChange={this.onChange}  />
+          onChange={this.paragraphChanged}  />
         <div className="one-post-btn-container flex">
           <Emotion />
           <Button type="primary" onClick={this.showModal} className="btn btn-submit">저장</Button>

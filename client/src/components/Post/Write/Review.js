@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Button, Icon, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { Link } from 'react-router-dom'
-
-const { TextArea } = Input;
 
 class Review extends Component {
   state = {
@@ -30,6 +28,10 @@ class Review extends Component {
     });
   };
 
+  onChange(event) {
+    
+  }
+
   render() {
 
     return (
@@ -49,8 +51,8 @@ class Review extends Component {
         </p>
       
         <div className="one-selected-btnContainer flex">
-          <Button type="dashed" onClick={this.showModal} className="btn btn-delete">삭제</Button>
-            <Modal title="Basic Modal" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} >
+          <Button type="dashed" onClick={this.showModal} onChange={this.onChange} className="btn btn-delete">삭제</Button>
+            <Modal title="Basic Modal" visible={this.state.visible} okType= 'danger' onOk={this.handleOk} onCancel={this.handleCancel} >
               <p>정말 삭제하시겠습니까?</p>
             </Modal>
           <Button type="primary" className="btn btn-submit" >

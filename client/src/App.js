@@ -3,7 +3,7 @@ import './App.scss'
 import Home from './components/Home/Home'
 import HeaderLayout from './components/HeaderLayout'
 import Write from './components/Post/Write/Write'
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch, Link, withRouter } from 'react-router-dom'
 import NormalLoginForm from './components/Login/Login'
 import { Modal, Layout, Menu, Icon, DatePicker } from 'antd'
 import PostList from './components/Post/PostList/PostList'
@@ -12,7 +12,6 @@ import Settings from './components/Settings'
 import SignUp from './components/Login/SignUp'
 import Unsubscribe from './components/Login/Unsubscribe'
 import Review from './components/Post/Write/Review'
-import { withRouter } from 'react-router'
 import axios from 'axios'
 
 
@@ -39,6 +38,14 @@ class App extends Component {
    
   }
 
+  pickedDate = (date, dateString) => {
+    dateString = Number(dateString.replace(/-/g, ''));
+    
+    this.props.history.push({
+      pathname: '/post/write',
+      state: {date: dateString}
+    });
+  }
   // onChange(event)  {
   //   this.setState({      
   //    })
@@ -103,8 +110,7 @@ class App extends Component {
                 <Menu.Item key="2">
                   <Link to="/post">
                     <MonthPicker 
-                      onChange={this.onChange}
-                      value={this.state.value} 
+                      onChange={this.pickedMonth}
                       placeholder="Select month" />                  
                   </Link> 
                 <span className="nav-text"></span>
@@ -122,8 +128,7 @@ class App extends Component {
                 <Menu.Item key="3">
                   <Link to="/summary">
                     <DatePicker  
-                      value={this.state.date}
-                      onChange={this.dateString}
+                      onChange={this.pickedDate}
                     />                  
                   </Link> 
                 <span className="nav-text"></span>
@@ -176,6 +181,6 @@ class App extends Component {
         </Layout>
     </Fragment>     
     )          
-  }
-}
-export default withRouter(App)
+  };
+};
+export default withRouter(App);

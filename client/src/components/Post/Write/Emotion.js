@@ -8,7 +8,7 @@ class Emotion extends Component {
         <p>오늘 기분은??</p>
         <div className='iconList' style={{ padding: 5, background: '#fff', minHeight: 20}}>
 {/* 선택한 이모티콘에 value를 넣고, 저장되도록 설정해야 함 */}
-          <Button>
+          <Button key="">
             <Icon type="like" />
           </Button>
           <Button>
