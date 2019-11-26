@@ -1,10 +1,11 @@
 const express = require('express');
+const session = require('express-session');
 const knex = require('knex');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 const crypto = require('crypto');
 const router = express.Router();
-
+const bcypt = require('bcrypt');
 
 const app = express();
 const db = knex({
@@ -19,19 +20,48 @@ const db = knex({
 
 app.use(express.json());
 app.use(cors());
+app.use(session({
+  secret: 'one_sentence',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+app.get('/', (req, res) => {
+  if (!req.session.user) {
+    this.props.history.push('/login');
+  }
+});
 
 app.post('/login', (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const clientEmail = req.body.email;
+  const clientPassword = req.body.password;
   
-  // db.raw(`INSERT INTO user (email, password, created_data_time) VALUES ('${email}', ${encrypt_password}, now())`)
-  // .then((response) => {
-  //   res.status(200).end('OK');
-  // })
-  // .catch((error) => {
-  //   console.error(error);
-  //   res.status(500).end('FAILED');
-  // });
+  db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
+  .then((response) => {
+    console.log(response[0][0]);
+    
+    const serverEmail = response[0][0].email;
+    const serverSalt = response[0][0].salt;
+    const serverPassword = response[0][0].encrypt_pass;
+    const hashPassword = crypto.createHash('sha512').update(clientPassword + serverSalt).digest('base64');
+    const result = bcrypt.compareSync(hashPassword, serverPassword);
+    
+    console.log(`clientPassword=${hashPassword} / serverPassword=${serverPassword} / result=${result}`);
+    
+    
+    if (clientEmail === serverEmail && result) {
+      console.log('login success!!');
+      
+      res.session.user = clientEmail;
+      return res.json({message: 'success'});
+    }
+    
+    return res.status(400).json({message: 'failed'});
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).end('FAILED');
+  })
 });
 
 app.post('/signup', (req, res) => {
@@ -39,8 +69,7 @@ app.post('/signup', (req, res) => {
   const password = req.body.password;
   const salt = crypto.randomBytes(64).toString('hex');
   const encrypt_pass = crypto.createHash('sha512').update(password + salt).digest('base64');
-  console.log(`password = ${encrypt_pass}`);
-  
+  console.log(`email=${email} / password=${password}`);
   
   db.raw(`INSERT INTO user (email, salt, encrypt_pass, created_data_time) VALUES ('${email}', '${salt}', '${encrypt_pass}', now())`)
   .then((response) => {

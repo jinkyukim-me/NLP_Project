@@ -20,6 +20,12 @@ const randomImg = () => {
 }
 
 class Home extends Component {
+  // componentDidMount() {
+  //   if (!req.session.user) {
+  //     this.props.history.push('/login');
+  //   }
+  // }
+  
   render() {
     return (
       <>  

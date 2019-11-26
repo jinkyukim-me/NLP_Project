@@ -13,23 +13,25 @@ class SignUpForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    let values;
+    const { email, password } = this.state;
+    
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        values = values;
+        axios.post('http://localhost:9000/signup', {
+          email: values.email,
+          password: values.password,
+        })
+        .then((response) => {
+          console.log('success');
+          this.props.history.push('/');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
       }
     });
     
-    axios.post('http://localhost:9000/signup', {
-      email: '',
-    })
-    .then((response) => {
-      console.log('success');
-    })
-    .catch((error) => {
-      console.error(error);
-    });
   };
 
   handleConfirmBlur = e => {
@@ -53,16 +55,6 @@ class SignUpForm extends Component {
     }
     callback();
   };
-
-  // handleWebsiteChange = value => {
-  //   let autoCompleteResult;
-  //   if (!value) {
-  //     autoCompleteResult = [];
-  //   } else {
-  //     autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-  //   }
-  //   this.setState({ autoCompleteResult });
-  // };
   
   render() {
     const { getFieldDecorator } = this.props.form;

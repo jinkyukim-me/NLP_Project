@@ -44,10 +44,6 @@ class App extends Component {
       pathname: '/post/write',
       state: {date: dateString}
     });
-    
-    // this.setState({
-    //   postDate: dateString,
-    // });
   }
   
   handleOk = e => {

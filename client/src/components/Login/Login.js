@@ -1,18 +1,34 @@
 
 import React, { Component } from 'react'
 import { Layout, Form, Icon, Input, Button } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 class NormalLoginForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values)
+        console.log('Received values of form: ', values);
+        
+        axios.post('http://localhost:9000/login', {
+          email: values.email,
+          password: values.password,
+        })
+        .then((response) => {
+          console.log(response);
+          
+          if (response.message === 'success') {
+            this.props.history.push('/');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
       }
     });
   };
-
+  
   render() {
   const { getFieldDecorator } = this.props.form
     return (
@@ -20,7 +36,7 @@ class NormalLoginForm extends Component {
       <Layout className="one-login flex flex-center">
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Form.Item className="one-input one-input-email">
-              {getFieldDecorator('mail', {
+              {getFieldDecorator('email', {
                 rules: [{ required: true, message: '이메일 주소를 입력해주세요!' }],
               })(
             <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="이메일" />,
@@ -34,11 +50,9 @@ class NormalLoginForm extends Component {
               )}
             </Form.Item>
             <Form.Item>
-              <Link to="/post/write" className="btn-wrap">
-                <Button type="primary" htmlType="submit" className="login-form-button" block>
-                  로그인
-                </Button> 
-              </Link>           
+              <Button type="primary" htmlType="submit" className="login-form-button btn-wrap" block>
+                로그인
+              </Button>
               <div className="shortcut flex">
                 <Link to="/signup">회원가입</Link>
                 <Link to="">비밀번호 찾기</Link>
@@ -52,4 +66,4 @@ class NormalLoginForm extends Component {
 }
 const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(NormalLoginForm)
 
-export default WrappedNormalLoginForm
+export default withRouter(WrappedNormalLoginForm);
