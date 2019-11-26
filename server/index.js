@@ -6,6 +6,8 @@ const dotenv = require('dotenv').config();
 const crypto = require('crypto');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+// const passport = require('passport');
+// const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
 const db = knex({
@@ -26,48 +28,67 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-app.get('/', (req, res) => {
-  if (!req.session.user) {
-    this.props.history.push('/login');
-  }
-});
-
-app.post('/login', (req, res) => {
+app.post('/login', (req, res, next) => {
   const clientEmail = req.body.email;
   const clientPassword = req.body.password;
   
   db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
   .then((response) => {
-    console.log(response[0][0]);
-    
     const serverEmail = response[0][0].email;
-    const serverSalt = response[0][0].salt;
+    const salt = response[0][0].salt;
     const serverPassword = response[0][0].encrypt_pass;
-    const hashPassword = crypto.createHash('sha512').update(clientPassword + serverSalt).digest('base64');
-    const result = bcrypt.compareSync(hashPassword, serverPassword);
     
-    console.log(`clientPassword=${hashPassword} / serverPassword=${serverPassword} / result=${result}`);
-    
-    
-    if (clientEmail === serverEmail && result) {
-      console.log('login success!!');
+    bcrypt.compare(clientPassword + salt, serverPassword, (err, res) => {
+      if (err) {
+        return next(err);
+      }
       
-      res.session.user = clientEmail;
-      return res.json({message: 'success'});
-    }
+      if (res) {
+        console.log(`res=${res}`);
+      }
+    });
     
-    return res.status(400).json({message: 'failed'});
+    req.session.user = clientEmail;
+    return res.sendStatus(204);
   })
   .catch((error) => {
     console.error(error);
-    res.status(500).end('FAILED');
-  })
+  });
+});
+
+app.get('/', (req, res) => {
+  console.log('hi there!!');
+  
+  if (!req.session.user) {
+    // this.props.history.push('/login');
+    res.sendStatus(401);
+    console.log('has no session');
+  } else {
+    
+    res.send('session!!!!!!!!');
+  }
+  
+  if (req.session.user) {
+    console.log('has session');
+  }
 });
 
 app.post('/signup', (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const salt = `${Math.round(new Date().valueOf() * Math.random())}`;
+  
+  // const salt = bcrypt.genSalt(10, function(err, salt) {
+  //   if (err) {
+  //       console.log('bcrypt.genSalt() errer : ', err.message);
+  //   } else {
+  //       bcrypt.hash(plainTextPassword, salt, null, function(err, hash) {
+  //           if (err) { console.log('bcrypt.hash() errer : ', err.message); } 
+  //           else { console.log(hash); }
+  //       });
+  //     }
+  //   });
+  // });
   
   bcrypt.hash(password + salt, 10, (err, hash) => {
     if (err) {

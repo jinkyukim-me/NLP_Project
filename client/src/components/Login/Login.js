@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import { Layout, Form, Icon, Input, Button } from 'antd'
 import { Link, withRouter } from 'react-router-dom';
@@ -16,11 +15,8 @@ class NormalLoginForm extends Component {
           password: values.password,
         })
         .then((response) => {
-          console.log(response);
-          
-          if (response.message === 'success') {
-            this.props.history.push('/');
-          }
+          console.log(`response=${response}`);
+          this.props.history.push('/');
         })
         .catch((error) => {
           console.error(error);
