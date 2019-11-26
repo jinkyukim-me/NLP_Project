@@ -13,8 +13,6 @@ class SignUpForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { email, password } = this.state;
-    
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);

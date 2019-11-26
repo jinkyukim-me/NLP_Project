@@ -5,7 +5,7 @@ const cors = require('cors');
 const dotenv = require('dotenv').config();
 const crypto = require('crypto');
 const router = express.Router();
-const bcypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const db = knex({
@@ -64,21 +64,25 @@ app.post('/login', (req, res) => {
   })
 });
 
-app.post('/signup', (req, res) => {
+app.post('/signup', (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  const salt = crypto.randomBytes(64).toString('hex');
-  const encrypt_pass = crypto.createHash('sha512').update(password + salt).digest('base64');
-  console.log(`email=${email} / password=${password}`);
+  const salt = `${Math.round(new Date().valueOf() * Math.random())}`;
   
-  db.raw(`INSERT INTO user (email, salt, encrypt_pass, created_data_time) VALUES ('${email}', '${salt}', '${encrypt_pass}', now())`)
-  .then((response) => {
-    res.status(200).end('OK');
+  bcrypt.hash(password + salt, 10, (err, hash) => {
+    if (err) {
+      return next(err);
+    }
+    
+    db.raw(`INSERT INTO user (email, salt, encrypt_pass, created_data_time) VALUES ('${email}', '${salt}', '${hash}', now())`)
+    .then((response) => {
+      res.status(200).end('OK');
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).end('FAILED');
+    });
   })
-  .catch((error) => {
-    console.error(error);
-    res.status(500).end('FAILED');
-  });
 });
 
 // app.post('/post', (req, res) => {
