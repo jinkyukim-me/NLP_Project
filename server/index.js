@@ -6,10 +6,12 @@ const cors = require('cors');
 // const crypto = require('crypto');
 // const router = express.Router();
 // const bcrypt = require('bcrypt');
-// const passport = require('passport');
+const passport = require('passport');
 // const LocalStrategy = require('passport-local').Strategy;
+const cookieParser = require('cookie-parser');
 
 const auth = require('./routes/auth');
+const passportConfig = require('./config/passport');
 
 const app = express();
 // const db = knex({
@@ -24,24 +26,26 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use(session({
-  secret: 'one_sentence',
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(cookieParser());
+app.use(passport.initialize());
+// app.use(session({
+//   secret: 'one_sentence',
+//   resave: false,
+//   saveUninitialized: true,
+// }));
 
-const authorize = (req, res, next) => {
-  console.log('enter authorize');
+// const authorize = (req, res, next) => {
+//   console.log('enter authorize');
   
-  if (req.session.user) {
-    console.log('req.session.user');
+//   if (req.session.user) {
+//     console.log('req.session.user');
     
-    return next();
-  }
-  console.log('out authorize');
+//     return next();
+//   }
+//   console.log('out authorize');
   
-  return res.redirect(401, '/auth/login');
-}
+//   return res.redirect(401, '/auth/login');
+// }
 
 app.use('/auth', auth);
 
@@ -73,7 +77,7 @@ app.use('/auth', auth);
 //   });
 // });
 
-app.get('/', authorize, (req, res) => {
+app.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
   console.log(`session=${req.session.user}`);
   
   return res.status(200).end('OK');

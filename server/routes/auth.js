@@ -4,8 +4,10 @@ const routes = express.Router();
 const session = require('express-session');
 const knex = require('knex');
 const cors = require("cors");
-const env = require('dotenv').config();
+const dotenv = require('dotenv').config();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
 app.use(express.json());
 app.use(cors());
@@ -21,28 +23,48 @@ const db = knex({
 });
 
 routes.post('/login', (req, res, next) => {
-  const clientEmail = req.body.email;
-  const clientPassword = req.body.password;
-  
-  db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
-  .then((response) => {
-    const serverEmail = response[0][0].email;
-    const salt = response[0][0].salt;
-    const serverPassword = response[0][0].encrypt_pass;
+  passport.authenticate('local', {session: false}, (err, user, info) => {
+    if (err || !user) {
+      return res.status(400).json({
+        message: '무언가가 잘못 되었습니다.',
+        user: user
+      });
+    }
     
-    bcrypt.compare(clientPassword + salt, serverPassword, (err, res) => {
+    req.login(user, {session: false}, (err) => {
       if (err) {
-        return next(err);
+        res.send(err);
       }
+      
+      const token = jwt.sign(user, process.env.JWT_SECRET);
+      return res.json({
+        user: token
+      });
     });
-    console.log(response);
-    
-    req.session.user = clientEmail;
-    res.redirect(204, '/auth/setting');
-  })
-  .catch((error) => {
-    console.error(error);
   });
+  
+  // const clientEmail = req.body.email;
+  // const clientPassword = req.body.password;
+  
+  // db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
+  // .then((response) => {
+  //   const serverEmail = response[0][0].email;
+  //   const salt = response[0][0].salt;
+  //   const serverPassword = response[0][0].encrypt_pass;
+    
+  //   bcrypt.compare(clientPassword + salt, serverPassword, (err, res) => {
+  //     if (err) {
+  //       return next(err);
+  //     }
+  //   });
+  //   console.log(response);
+    
+  //   req.session.user = clientEmail;
+  //   res.redirect(204, '/auth/setting');
+  // })
+  // .catch((error) => {
+  //   console.error(error);
+  // });
 });
 
 routes.post('/signup', (req, res, next) => {
@@ -75,7 +97,7 @@ routes.post('/signup', (req, res, next) => {
       console.error(error);
       res.status(500).end('FAILED');
     });
-  })
+  });
 });
 
 module.exports = routes;
