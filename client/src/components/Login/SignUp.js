@@ -16,7 +16,7 @@ class SignUpForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        axios.post('http://localhost:9000/signup', {
+        axios.post('http://localhost:9000/auth/signup', {
           email: values.email,
           password: values.password,
         })

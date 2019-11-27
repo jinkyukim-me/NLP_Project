@@ -1,24 +1,26 @@
 const express = require('express');
 const session = require('express-session');
-const knex = require('knex');
+// const knex = require('knex');
 const cors = require('cors');
-const dotenv = require('dotenv').config();
-const crypto = require('crypto');
-const router = express.Router();
-const bcrypt = require('bcrypt');
+// const env = require('dotenv').config();
+// const crypto = require('crypto');
+// const router = express.Router();
+// const bcrypt = require('bcrypt');
 // const passport = require('passport');
 // const LocalStrategy = require('passport-local').Strategy;
 
+const auth = require('./routes/auth');
+
 const app = express();
-const db = knex({
-  client: "mysql",
-  connection: {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-  }
-});
+// const db = knex({
+//   client: "mysql",
+//   connection: {
+//     host: process.env.DB_HOST,
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASSWORD,
+//     database: process.env.DB_NAME,
+//   }
+// });
 
 app.use(express.json());
 app.use(cors());
@@ -28,83 +30,87 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-app.post('/login', (req, res, next) => {
-  const clientEmail = req.body.email;
-  const clientPassword = req.body.password;
-  
-  db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
-  .then((response) => {
-    const serverEmail = response[0][0].email;
-    const salt = response[0][0].salt;
-    const serverPassword = response[0][0].encrypt_pass;
-    
-    bcrypt.compare(clientPassword + salt, serverPassword, (err, res) => {
-      if (err) {
-        return next(err);
-      }
-      
-      if (res) {
-        console.log(`res=${res}`);
-      }
-    });
-    
-    req.session.user = clientEmail;
-    return res.sendStatus(204);
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-});
-
-app.get('/', (req, res) => {
-  console.log('hi there!!');
-  
-  if (!req.session.user) {
-    // this.props.history.push('/login');
-    res.sendStatus(401);
-    console.log('has no session');
-  } else {
-    
-    res.send('session!!!!!!!!');
-  }
+const authorize = (req, res, next) => {
+  console.log('enter authorize');
   
   if (req.session.user) {
-    console.log('has session');
+    console.log('req.session.user');
+    
+    return next();
   }
+  console.log('out authorize');
+  
+  return res.redirect(401, '/auth/login');
+}
+
+app.use('/auth', auth);
+
+// app.post('/login', (req, res, next) => {
+//   const clientEmail = req.body.email;
+//   const clientPassword = req.body.password;
+  
+//   db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
+//   .then((response) => {
+//     const serverEmail = response[0][0].email;
+//     const salt = response[0][0].salt;
+//     const serverPassword = response[0][0].encrypt_pass;
+    
+//     bcrypt.compare(clientPassword + salt, serverPassword, (err, res) => {
+//       if (err) {
+//         return next(err);
+//       }
+      
+//       // if (res) {
+//       //   console.log(`res=${res}`);
+//       // }
+//     });
+    
+//     req.session.user = clientEmail;
+//     return res.sendStatus(204);
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
+// });
+
+app.get('/', authorize, (req, res) => {
+  console.log(`session=${req.session.user}`);
+  
+  return res.status(200).end('OK');
 });
 
-app.post('/signup', (req, res, next) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const salt = `${Math.round(new Date().valueOf() * Math.random())}`;
+// app.post('/signup', (req, res, next) => {
+//   const email = req.body.email;
+//   const password = req.body.password;
+//   const salt = `${Math.round(new Date().valueOf() * Math.random())}`;
   
-  // const salt = bcrypt.genSalt(10, function(err, salt) {
-  //   if (err) {
-  //       console.log('bcrypt.genSalt() errer : ', err.message);
-  //   } else {
-  //       bcrypt.hash(plainTextPassword, salt, null, function(err, hash) {
-  //           if (err) { console.log('bcrypt.hash() errer : ', err.message); } 
-  //           else { console.log(hash); }
-  //       });
-  //     }
-  //   });
-  // });
+//   // const salt = bcrypt.genSalt(10, function(err, salt) {
+//   //   if (err) {
+//   //       console.log('bcrypt.genSalt() errer : ', err.message);
+//   //   } else {
+//   //       bcrypt.hash(plainTextPassword, salt, null, function(err, hash) {
+//   //           if (err) { console.log('bcrypt.hash() errer : ', err.message); } 
+//   //           else { console.log(hash); }
+//   //       });
+//   //     }
+//   //   });
+//   // });
   
-  bcrypt.hash(password + salt, 10, (err, hash) => {
-    if (err) {
-      return next(err);
-    }
+//   bcrypt.hash(password + salt, 10, (err, hash) => {
+//     if (err) {
+//       return next(err);
+//     }
     
-    db.raw(`INSERT INTO user (email, salt, encrypt_pass, created_data_time) VALUES ('${email}', '${salt}', '${hash}', now())`)
-    .then((response) => {
-      res.status(200).end('OK');
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).end('FAILED');
-    });
-  })
-});
+//     db.raw(`INSERT INTO user (email, salt, encrypt_pass, created_data_time) VALUES ('${email}', '${salt}', '${hash}', now())`)
+//     .then((response) => {
+//       res.status(200).end('OK');
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//       res.status(500).end('FAILED');
+//     });
+//   })
+// });
 
 // app.post('/post', (req, res) => {
 //   const paragraph = req.body.paragraph;

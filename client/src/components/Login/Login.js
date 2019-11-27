@@ -10,13 +10,20 @@ class NormalLoginForm extends Component {
       if (!err) {
         console.log('Received values of form: ', values);
         
-        axios.post('http://localhost:9000/login', {
+        axios.post('http://localhost:9000/auth/login', {
           email: values.email,
           password: values.password,
         })
         .then((response) => {
-          console.log(`response=${response}`);
-          this.props.history.push('/');
+          // this.props.history.push({
+          //   pathname: '/',
+          //   state: {
+          //     _session: true,
+          //   },
+          // });
+          console.log(response);
+          
+          // this.props.history.push('/');
         })
         .catch((error) => {
           console.error(error);
