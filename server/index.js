@@ -1,20 +1,21 @@
 const express = require('express');
+const app = express();
 const session = require('express-session');
-const knex = require('knex');
 const cors = require('cors');
-const env = require('dotenv').config();
-// const crypto = require('crypto');
-// const router = express.Router();
+const dotenv = require('dotenv').config();
+const knex = require('knex');
 const bcrypt = require('bcrypt');
-const passport = require('passport');
-// const passport = require('passport');
-// const LocalStrategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
 
-// const auth = require('./routes/auth');
-const passportConfig = require('./config/passport');
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
+app.use(session({
+  secret: 'one_sentence',
+  resave: false,
+  saveUninitialized: false,
+}));
 
-const app = express();
 const db = knex({
   client: "mysql",
   connection: {
@@ -25,44 +26,13 @@ const db = knex({
   }
 });
 
-app.use(express.json());
-app.use(cors());
-app.use(cookieParser());
-// app.use(passport.initialize());
-app.use(session({
-  secret: 'one_sentence',
-  resave: false,
-  saveUninitialized: true,
-}));
-
-const authorize = (req, res, next) => {
-  console.log('enter authorize');
-  
-  // if (req.session.user) {
-  //   console.log('req.session.user');
-    
-  //   return next();
-  // }
-  // console.log('out authorize');
-  
+app.get('/', (req, res) => {
   if (!req.session.user) {
-    return res.redirect(401, '/auth/login');
+    res.redirect('/auth/login');
   }
-  
-  next();
-}
+});
 
-const isNotLogined = (req, res, next) => {
-  if (!req.session.user) {
-    return next();
-  }
-  
-  res.redirect(403, '/');
-}
-
-// app.use('/auth', isNotLogined, auth);
-
-app.post('/auth/login', (req, res, next) => {
+app.post('/auth/login', (req, res) => {
   const clientEmail = req.body.email;
   const clientPassword = req.body.password;
   
@@ -72,202 +42,33 @@ app.post('/auth/login', (req, res, next) => {
     const salt = response[0][0].salt;
     const serverPassword = response[0][0].encrypt_pass;
     
-    bcrypt.compare(clientPassword + salt, serverPassword, (err, res) => {
-      if (err) {
-        return next(err);
-      }
-      
-      return next();
-    });
+    const result = bcrypt.compareSync(clientPassword + salt, serverPassword);
     
+    if (result) {
+      req.session.user = req.body.email;
+      res.sendStatus(204);
+      // res.status(204).set('token', process.env.TOKEN_STRING).json({user_id: clientEmail});
+      
+      return;
+    }
+    
+    res.status(401).json({isLogined: false});
   })
   .catch((error) => {
     console.error(error);
   });
-}, (req, res) => {
-  req.session.user = req.body.email;
-  res.sendStatus(204);
 });
 
-app.get('/', (req, res) => {
-  console.log('hi there!!');
+app.get('/setting', (req, res) => {
+  console.log(req.session);
   
-  req.session.tmp = 'hi there';
-  
-  // if (!req.session.user) {
-  //   // this.props.history.push('/login');
-  //   res.sendStatus(401);
-  //   console.log('has no session');
-  // } else {
-    
-  //   res.send('session!!!!!!!!');
-  // }
-  
-  // if (req.session.user) {
-  //   console.log('has session');
-  // }
-  
-  // if (!req.session.user) {
-  //   res.json({_cookie: 'empty'}).redirect('/auth/login');
-  // } else {
-  //   console.log('hi pen');
-    
-  // }
-});
-
-// app.post('/signup', isNotLogined, (req, res, next) => {
-//   const email = req.body.email;
-//   const password = req.body.password;
-//   const salt = `${Math.round(new Date().valueOf() * Math.random())}`;
-  
-//   // const salt = bcrypt.genSalt(10, function(err, salt) {
-//   //   if (err) {
-//   //       console.log('bcrypt.genSalt() errer : ', err.message);
-//   //   } else {
-//   //       bcrypt.hash(plainTextPassword, salt, null, function(err, hash) {
-//   //           if (err) { console.log('bcrypt.hash() errer : ', err.message); } 
-//   //           else { console.log(hash); }
-//   //       });
-//   //     }
-//   //   });
-//   // });
-  
-//   bcrypt.hash(password + salt, 10, (err, hash) => {
-//     if (err) {
-//       return next(err);
-//     }
-    
-//     db.raw(`INSERT INTO user (email, salt, encrypt_pass, created_data_time) VALUES ('${email}', '${salt}', '${hash}', now())`)
-//     .then((response) => {
-//       res.status(200).end('OK');
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//       res.status(500).end('FAILED');
-//     });
-//   })
-// });
-
-// app.post('/post', (req, res) => {
-//   const paragraph = req.body.paragraph;
-//   const affectivity = req.body.affectivity;
-  
-//   db.raw(`INSERT INTO post (create_post_date, paragraph, created_data_time) VALUES (now(), '${paragraph}', now())`)
-//   .then((response) => {
-//     res.status(200).end('OK');
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//     res.status.end('FAILED');
-//   });
-  
-//   db.raw(`INSERT INTO post (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
-//   .then((response) => {
-//     res.status(200).end('OK');
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//     res.status(500).end('OK');
-//   });
-// });
-
-// app.post('/edit_post', (req, res) => {
-//   const userId = req.body.user_id;
-//   const postId = req.body.post_id;
-//   const paragraph = req.body.paragraph;
-  
-//   db.raw(`UPDATE post SET id='${userId}', post_id='${postId}', paragraph='${paragraph}', modified_data_time=now()`)
-//   .then((response) => {
-//     res.status(200).end('OK');
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//     res.status.end('FAILED');
-//   });
-// });
-// HTTP header Authorization => Bearer 1234128asldf-asdflkajsvxc-sdf 
-// post single
-app.post('/post/:view', authorize, (req, res) => {
-  const num = /^\d+?/;
-  const view = req.params.view;
-  const userId = req.body.user_id;
-  const postId = req.body.post_id;
-  const postDate = req.body.postDate;
-  const paragraph = req.body.paragraph;
-  const affectivity = req.body.affectivity;
-  
-  if (view === 'write') {
-    console.log(`paragraph = ${paragraph}`);
-    
-    db.raw(`INSERT INTO post (create_post_date, paragraph, created_data_time) VALUES (${postDate}, '${paragraph}', now())`)
-    .then((response) => {
-      res.status(200).end('OK');
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).end('FAILED');
-    });
-    
-    // db.raw(`INSERT INTO post (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
-    // .then((response) => {
-    //   res.status(200).end('OK');
-    // })
-    // .catch((error) => {
-    //   console.error(error);
-    //   res.status(500).end('FAILED');
-    // });
-    return;
-  }
-  // if (view.match(num)) {
-  //   db.raw(`INSERT INTO post (create_post_date, paragraph, created_data_time) VALUES (now(), '${paragraph}', now())`)
-  //   .then((response) => {
-  //     res.status(200).end('OK');
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //     res.status.end('FAILED');
-  //   });
-    
-  //   db.raw(`INSERT INTO post (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
-  //   .then((response) => {
-  //     res.status(200).end('OK');
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //     res.status(500).end('OK');
-  //   });
-  //   return;
-  // }
-  
-  if (view === 'modify') {
-    db.raw(`UPDATE post SET id='${userId}', post_id='${postId}', paragraph='${paragraph}', modified_data_time=now()`)
-    .then((response) => {
-      res.status(200).end('OK');
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status.end('FAILED');
-    });
-  }
-});
-
-app.get('/post/:view', authorize, (req, res) => {
-  const num = /^\d+?/;
-  const view = req.params.view;
-  
-  if (view.match(num)) {
-    db.raw(`SELECT create_post_date, paragraph FROM post WHERE id=10`)
-    .then((response) => {
-      // console.log(response);
-      res.status(200).send(response[0][0]);
-      // console.log(response[0][0].create_post_date);
-    })
-    .catch ((error) => {
-      res.status(500).end('FAILED');
-    });
+  if (req.session.user) {
+    console.log('setting enter');
+  } else {
+    console.log('setting not enter');
   }
 });
 
 app.listen(9000, () => {
-  console.log('server started at 9000');
+  console.log('server start on 9000 port!!');
 });
