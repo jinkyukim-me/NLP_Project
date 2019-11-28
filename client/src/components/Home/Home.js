@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Layout, Menu, Icon, DatePicker, Button } from 'antd';
 // import './Home.css'
 import axios from 'axios';
@@ -20,19 +20,14 @@ const randomImg = () => {
 }
 
 class Home extends Component {
-  componentDidMount() {
-    axios.get('/')
-    .then((response) => {
-      console.log(response);
-      
-      if (response.status !== 204) {
-        this.props.history.push('/auth/login');
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  }
+  // componentDidMount() {
+  //   axios.get('/')
+  //   .then((response) => {
+  //     if (response.data._cookie === 'empty') {
+  //       this.props.history.push('/auth/login');
+  //     }
+  //   })
+  // }
   
   render() {
     return (
@@ -48,4 +43,4 @@ class Home extends Component {
     )
   }
 }
-export default withRouter(Home);
+export default Home;

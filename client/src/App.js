@@ -138,7 +138,7 @@ class App extends Component {
                 </Link>
               </Menu.Item>           */}
               <Menu.Item key="4">
-                <Link to="/auth/setting">
+                <Link to="/setting">
                   <Icon type="setting" />
                   <span className="nav-text">설정</span>
                 </Link>
@@ -166,7 +166,7 @@ class App extends Component {
                 <Route exact path="/" component={Home} />
                 <Route path="/post/write" component={Write} />
                 <Route path="/auth/login" component={NormalLoginForm} />
-                <Route path="/auth/setting" component={Settings} />
+                <Route path="/setting" component={Settings} />
                 <Route path="/auth/signup" component={SingUp} />
                 <Route path="/unsubscribe" component={Unsubscribe} />
                 {/* <Route path="/logout" component={Logout} /> */}

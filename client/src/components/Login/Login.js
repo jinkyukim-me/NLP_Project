@@ -15,15 +15,8 @@ class NormalLoginForm extends Component {
           password: values.password,
         })
         .then((response) => {
-          // this.props.history.push({
-          //   pathname: '/',
-          //   state: {
-          //     _session: true,
-          //   },
-          // });
-          console.log(response);
-          
-          // this.props.history.push('/');
+          console.log(`response=${response}`);
+          this.props.history.push('/');
         })
         .catch((error) => {
           console.error(error);

@@ -1,89 +1,121 @@
 const express = require('express');
 const session = require('express-session');
-// const knex = require('knex');
+const knex = require('knex');
 const cors = require('cors');
-// const env = require('dotenv').config();
+const env = require('dotenv').config();
 // const crypto = require('crypto');
 // const router = express.Router();
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const passport = require('passport');
+// const passport = require('passport');
 // const LocalStrategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
 
-const auth = require('./routes/auth');
+// const auth = require('./routes/auth');
 const passportConfig = require('./config/passport');
 
 const app = express();
-// const db = knex({
-//   client: "mysql",
-//   connection: {
-//     host: process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASSWORD,
-//     database: process.env.DB_NAME,
-//   }
-// });
+const db = knex({
+  client: "mysql",
+  connection: {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  }
+});
 
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
-app.use(passport.initialize());
-// app.use(session({
-//   secret: 'one_sentence',
-//   resave: false,
-//   saveUninitialized: true,
-// }));
+// app.use(passport.initialize());
+app.use(session({
+  secret: 'one_sentence',
+  resave: false,
+  saveUninitialized: true,
+}));
 
-// const authorize = (req, res, next) => {
-//   console.log('enter authorize');
+const authorize = (req, res, next) => {
+  console.log('enter authorize');
   
-//   if (req.session.user) {
-//     console.log('req.session.user');
+  // if (req.session.user) {
+  //   console.log('req.session.user');
     
-//     return next();
-//   }
-//   console.log('out authorize');
+  //   return next();
+  // }
+  // console.log('out authorize');
   
-//   return res.redirect(401, '/auth/login');
-// }
-
-app.use('/auth', auth);
-
-// app.post('/login', (req, res, next) => {
-//   const clientEmail = req.body.email;
-//   const clientPassword = req.body.password;
+  if (!req.session.user) {
+    return res.redirect(401, '/auth/login');
+  }
   
-//   db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
-//   .then((response) => {
-//     const serverEmail = response[0][0].email;
-//     const salt = response[0][0].salt;
-//     const serverPassword = response[0][0].encrypt_pass;
+  next();
+}
+
+const isNotLogined = (req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  
+  res.redirect(403, '/');
+}
+
+// app.use('/auth', isNotLogined, auth);
+
+app.post('/auth/login', (req, res, next) => {
+  const clientEmail = req.body.email;
+  const clientPassword = req.body.password;
+  
+  db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
+  .then((response) => {
+    const serverEmail = response[0][0].email;
+    const salt = response[0][0].salt;
+    const serverPassword = response[0][0].encrypt_pass;
     
-//     bcrypt.compare(clientPassword + salt, serverPassword, (err, res) => {
-//       if (err) {
-//         return next(err);
-//       }
+    bcrypt.compare(clientPassword + salt, serverPassword, (err, res) => {
+      if (err) {
+        return next(err);
+      }
       
-//       // if (res) {
-//       //   console.log(`res=${res}`);
-//       // }
-//     });
+      return next();
+    });
     
-//     req.session.user = clientEmail;
-//     return res.sendStatus(204);
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//   });
-// });
-
-app.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
-  console.log(`session=${req.session.user}`);
-  
-  return res.status(200).end('OK');
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+}, (req, res) => {
+  req.session.user = req.body.email;
+  res.sendStatus(204);
 });
 
-// app.post('/signup', (req, res, next) => {
+app.get('/', (req, res) => {
+  console.log('hi there!!');
+  
+  req.session.tmp = 'hi there';
+  
+  // if (!req.session.user) {
+  //   // this.props.history.push('/login');
+  //   res.sendStatus(401);
+  //   console.log('has no session');
+  // } else {
+    
+  //   res.send('session!!!!!!!!');
+  // }
+  
+  // if (req.session.user) {
+  //   console.log('has session');
+  // }
+  
+  // if (!req.session.user) {
+  //   res.json({_cookie: 'empty'}).redirect('/auth/login');
+  // } else {
+  //   console.log('hi pen');
+    
+  // }
+});
+
+// app.post('/signup', isNotLogined, (req, res, next) => {
 //   const email = req.body.email;
 //   const password = req.body.password;
 //   const salt = `${Math.round(new Date().valueOf() * Math.random())}`;
@@ -155,7 +187,7 @@ app.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 // });
 // HTTP header Authorization => Bearer 1234128asldf-asdflkajsvxc-sdf 
 // post single
-app.post('/post/:view', (req, res) => {
+app.post('/post/:view', authorize, (req, res) => {
   const num = /^\d+?/;
   const view = req.params.view;
   const userId = req.body.user_id;
@@ -219,7 +251,7 @@ app.post('/post/:view', (req, res) => {
   }
 });
 
-app.get('/post/:view', (req, res) => {
+app.get('/post/:view', authorize, (req, res) => {
   const num = /^\d+?/;
   const view = req.params.view;
   
