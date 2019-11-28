@@ -17,7 +17,7 @@ import Read from './components/Read/Read';
 import PostsList from './components/List';
 
 import Review from './components/Post/Write/Review'
-import axios from 'axios'
+import axios from 'axios';
 
 
 const { Sider, Content, Footer } = Layout
@@ -131,12 +131,12 @@ class App extends Component {
                 <span className="nav-text"></span>
                 </Menu.Item>            
               </SubMenu>    
-              {/* <Menu.Item key="4">
-                <Link to="/list">
+              <Menu.Item key="9">
+                <Link to="/auth/login">
                   <Icon type="unordered-list" />
-                  <span className="nav-text">글 목록</span>
+                  <span className="nav-text">login</span>
                 </Link>
-              </Menu.Item>           */}
+              </Menu.Item>          
               <Menu.Item key="4">
                 <Link to="/setting">
                   <Icon type="setting" />

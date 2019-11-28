@@ -1,14 +1,14 @@
 const express = require('express');
-const session = require('express-session');
 const app = express();
-const routes = express.Router();
+const session = require('express-session');
+const router = express.Router();
 const knex = require('knex');
 const cors = require("cors");
 const dotenv = require('dotenv').config();
 const bcrypt = require('bcrypt');
-// const jwt = require('jsonwebtoken');
-// const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const mysql = require('mysql');
 
 app.use(express.json());
 app.use(cors());
@@ -24,27 +24,21 @@ const db = knex({
   }
 });
 
-routes.post('/login', (req, res, next) => {
-  // passport.authenticate('local', {session: false}, (err, user, info) => {
-  //   if (err || !user) {
-  //     return res.status(400).json({
-  //       message: '무언가가 잘못 되었습니다.',
-  //       user: user
-  //     });
-  //   }
-    
-  //   req.login(user, {session: false}, (err) => {
-  //     if (err) {
-  //       res.send(err);
-  //     }
-      
-  //     const token = jwt.sign(user, process.env.JWT_SECRET);
-  //     return res.json({
-  //       user: token
-  //     });
-  //   });
-  // });
+router.use((req, res, next) => {
+  const token = req.cookies.user;
+  // const decoded = jwt.verify(token, process.env.JWT_SECRET);
   
+  if (token) {
+    console.log('decoded');
+    
+    res.redirect('/');
+  } else {
+    console.log('decoded failed haha');
+    next();
+  }
+});
+
+router.post('/login', (req, res) => {
   const clientEmail = req.body.email;
   const clientPassword = req.body.password;
   
@@ -53,28 +47,29 @@ routes.post('/login', (req, res, next) => {
     const serverEmail = response[0][0].email;
     const salt = response[0][0].salt;
     const serverPassword = response[0][0].encrypt_pass;
+    const result = bcrypt.compareSync(clientPassword + salt, serverPassword);
     
-    bcrypt.compare(clientPassword + salt, serverPassword, (err, res) => {
-      if (err) {
-        console.log('login failed');
-        
-        return next(err);
-      }
+    if (result) {
+      const token = jwt.sign({
+        user_id: clientEmail,
+      }, process.env.JWT_SECRET, {
+        expiresIn: '60m',
+      });
+      res.cookie('user', token);
+      res.status(204).json({token: token});
+      // res.status(204).set('token', process.env.TOKEN_STRING).json({user_id: clientEmail});
       
-      return next();
-    });
+      return;
+    }
+    
+    res.status(401).json({isLogined: false});
   })
   .catch((error) => {
     console.error(error);
   });
-}, (req, res) => {
-  console.log(req, req.session);
-  
-  req.session.user = req.body.email;
-  res.redirect(204, '/');
 });
 
-routes.post('/signup', (req, res, next) => {
+router.post('/signup', (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const salt = `${Math.round(new Date().valueOf() * Math.random())}`;
@@ -107,4 +102,4 @@ routes.post('/signup', (req, res, next) => {
   });
 });
 
-module.exports = routes;
+module.exports = router;

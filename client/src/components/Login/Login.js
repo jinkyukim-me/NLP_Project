@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Layout, Form, Icon, Input, Button } from 'antd'
 import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 class NormalLoginForm extends Component {
   handleSubmit = e => {
@@ -15,7 +16,9 @@ class NormalLoginForm extends Component {
           password: values.password,
         })
         .then((response) => {
-          console.log(`response=${response}`);
+          console.log(response);
+          const token = Cookies.get('user');  // undefined
+          localStorage.setItem('token', token);
           this.props.history.push('/');
         })
         .catch((error) => {
@@ -50,7 +53,7 @@ class NormalLoginForm extends Component {
                 로그인
               </Button>
               <div className="shortcut flex">
-                <Link to="/signup">회원가입</Link>
+                <Link to="/auth/signup">회원가입</Link>
                 <Link to="">비밀번호 찾기</Link>
               </div>
             </Form.Item>

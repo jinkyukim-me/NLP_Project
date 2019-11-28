@@ -6,6 +6,11 @@ const dotenv = require('dotenv').config();
 const knex = require('knex');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
+// const LocalStorage = require('node-localstorage').LocalStorage;
+// const localStorage = new LocalStorage('./scratch');
+const jwt = require('jsonwebtoken');
+const auth = require('./routes/auth');
+const mysql = require('mysql');
 
 app.use(express.json());
 app.use(cors());
@@ -16,56 +21,41 @@ app.use(session({
   saveUninitialized: false,
 }));
 
-const db = knex({
-  client: "mysql",
-  connection: {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+const authenticate = (req, res, next) => {
+  const token = req.cookies.user;
+  
+  if (!token) {
+    return next();
   }
-});
+  
+  res.redirect('/');
+}
+
+app.use('/auth', authenticate, auth);
 
 app.get('/', (req, res) => {
-  if (!req.session.user) {
+  const token = req.cookies.user;
+  
+  if (!token) {
+    console.log(`!decoded`);
+    
     res.redirect('/auth/login');
   }
 });
 
-app.post('/auth/login', (req, res) => {
-  const clientEmail = req.body.email;
-  const clientPassword = req.body.password;
-  
-  db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
-  .then((response) => {
-    const serverEmail = response[0][0].email;
-    const salt = response[0][0].salt;
-    const serverPassword = response[0][0].encrypt_pass;
-    
-    const result = bcrypt.compareSync(clientPassword + salt, serverPassword);
-    
-    if (result) {
-      req.session.user = req.body.email;
-      res.sendStatus(204);
-      // res.status(204).set('token', process.env.TOKEN_STRING).json({user_id: clientEmail});
-      
-      return;
-    }
-    
-    res.status(401).json({isLogined: false});
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-});
 
 app.get('/setting', (req, res) => {
-  console.log(req.session);
+  const token = req.cookies.user;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
   
-  if (req.session.user) {
-    console.log('setting enter');
+  if (decoded) {
+    console.log('decoded');
+    
+    res.end('ok');
   } else {
-    console.log('setting not enter');
+    console.log('decoded failed');
+    
+    res.redirect('/auth/login');
   }
 });
 

@@ -27,6 +27,9 @@ class Home extends Component {
   //       this.props.history.push('/auth/login');
   //     }
   //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   })
   // }
   
   render() {
