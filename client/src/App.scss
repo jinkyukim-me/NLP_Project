@@ -47,20 +47,24 @@
   height: 100vh;
   background-color: #fff;
 }
+@import url('https://fonts.googleapis.com/css?family=Stylish&display=swap');
 
+// @font-face
+// {
+//     src: url("./DX.ttf");
+//     font-family: "DX";
+// }
 .one-header {
   background-color: #f0f2f5;
 
   .one-logo {  
-      font-size: 30px; 
-      
+      font-size: 50px; 
+
     span {
       cursor: pointer;
-      background: linear-gradient(to right, #335e9e, #f8cce1f8);
-      font-size: 3rem;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      transition: 0.5s;      
+      color: black;
+      font-family: 'Stylish', sans-serif;
+
       :hover{
         transform: scale(1.5,1.5);
       }

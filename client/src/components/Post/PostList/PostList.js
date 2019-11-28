@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, message, Avatar, Spin } from 'antd';
+import { List, message, Spin } from 'antd';
 import reqwest from 'reqwest';
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -10,7 +10,7 @@ class PostsList extends Component {
     data: [],
     loading: false,
     hasMore: true,
-    date: '20191119',
+    date: '',
   };
 
   componentDidMount() {

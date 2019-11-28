@@ -26,31 +26,31 @@ class Write extends Component {
   };
 
 
-  // handleOk = e => {    
-  //   this.props.history.push('/post')
-  //   this.setState({
-  //     visible: false,   
+  handleOk = e => {    
+    this.props.history.push('/post')
+    this.setState({
+      visible: false,   
+    })
+  };
+  // handleOk = e => { 
+  //   axios.post("http://localhost:9000/api/posts", {
+  //     paragraph: this.state.paragraph,
+  //     affectivity: this.state.affectivity,
   //   })
-  // };
-  handleOk = e => { 
-    axios.post("http://localhost:9000/api/posts", {
-      paragraph: this.state.paragraph,
-      affectivity: this.state.affectivity,
-    })
-    .then((response) => {         
-      alert("당신의 소중한 하루가 저장되었습니다.")  
-      this.setState({
-        visible: false,
-        paragraph: "",
-        affectivity: "",     
-      })
-      this.props.history.push('/post')       
-    })
-    .catch((error) => {
-      console.error(error)
-    })
-    console.log(this.state)
-  }
+  //   .then((response) => {         
+  //     alert("당신의 소중한 하루가 저장되었습니다.")  
+  //     this.setState({
+  //       visible: false,
+  //       paragraph: "",
+  //       affectivity: "",     
+  //     })
+  //     this.props.history.push('/post')       
+  //   })
+  //   .catch((error) => {
+  //     console.error(error)
+  //   })
+  //   console.log(this.state)
+  // }
 
   handleCancel = e => {
     console.log(e);
