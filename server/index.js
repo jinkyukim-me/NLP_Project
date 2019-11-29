@@ -10,10 +10,16 @@ const cookieParser = require('cookie-parser');
 // const localStorage = new LocalStorage('./scratch');
 const jwt = require('jsonwebtoken');
 const auth = require('./routes/auth');
+const posts = require('./routes/posts');
 const mysql = require('mysql');
 
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+};
+
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(session({
   secret: 'one_sentence',
@@ -42,6 +48,7 @@ const db = knex({
 // }
 
 app.use('/auth', auth);
+app.use('/post', posts);
 
 app.get('/', (req, res) => {
   const token = req.cookies.user;
@@ -49,102 +56,57 @@ app.get('/', (req, res) => {
   if (!token) {
     console.log(`!decoded`);
     
-    res.redirect('/auth/login');
+    // res.redirect('autsh/login');
   }
 });
 
-app.post('/post/write', (req, res) => {
-  // let num = /^\d+?/;
-  // let view = req.params.view;
-  // const userId = req.body.user_id;
+app.put('/setting', (req, res) => {
+  // const token = req.cookies.user;
+  // const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const userId = 31;
-  const postDate = req.body.postDate;
-  const paragraph = req.body.paragraph;
-  const affectivity = req.body.affectivity;
+  const clientEmail = 'test@gmail.com';
+  const clientPassword = req.body.password;
+  let salt;
   
-  db.raw(`INSERT INTO post (user_id, paragraph, created_data_time, modified_data_time) VALUES (${userId}, '${paragraph}', now(), now())`)
+  db.raw(`SELECT email, salt, encrypt_pass FROM user WHERE email = '${clientEmail}'`)
   .then((response) => {
-    res.status(200).end('OK');
+    // const serverEmail = response[0][0].email;
+    salt = response[0][0].salt;
+    // const serverPassword = response[0][0].encrypt_pass;
+    // const result = bcrypt.compareSync(clientPassword + salt, serverPassword);
   })
   .catch((error) => {
     console.error(error);
-    res.status(500).end('FAILED');
   });
   
-  db.raw(`INSERT INTO emotion (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
-  .then((response) => {
-    res.status(200).end('OK');
-  })
-  .catch((error) => {
-    console.error(error);
-    res.status(500).end('FAILED');
-  });
-});
-
-app.put('/post/modify', (req, res) => {
-  const userId = 31;
-  const paragraph = req.body.paragraph;
-  const affectivity = req.body.affectivity;
-  
-  db.raw(`UPDATE post SET paragraph = '${paragraph}', modified_data_time = now() WHERE user_id = ${userId}`)
-  .then((response) => {
-    res.status(200).end('OK');
-  })
-  .catch((error) => {
-    console.error(error);
-    res.status(500).end('FAILED');
-  });
-});
-
-app.post('/post/:view', (req, res) => {
-  const num = /^\d+?/;
-  const view = req.params.view;
-  const userId = 31;
-  // const date = this.props.date;
-  const {date} = this.props.state;
-  
-  if (view.match(num)) {
-    db.raw(`SELECT id, paragraph, created_data_time FROM post WHERE user_id = ${userId}`)
+  bcrypt.hash(clientPassword + salt, 10, (err, hash) => {
+    if (err) {
+      console.error(err);
+      
+      return;
+    }
+    
+    db.raw(`UPDATE user SET encrypt_pass = '${hash}' WHERE id = ${userId}`)
     .then((response) => {
-      const days = response[0];
-      const pickedDays = [];
-      
-      for (let i = 0; i < 3; i++) {
-        const id = days[i].id;
-        const paragraph = days[i].paragraph;
-        const dbDate = days[i].created_data_time;
-        
-        if (date === dbDate) {
-          pickedDays.push({id: id, paragraph: paragraph});
-        }
-      }
-      
-      console.log(date, pickedDays, typeof dbDate);
-      res.end('ok');
+      res.status(200).end('OK');
     })
     .catch((error) => {
       console.error(error);
+      res.status(500).end('FAILED');
     });
-  }
-});
-
-// app.get('/list', (req, res) => {
-  // const 
-// });
-
-app.get('/setting', (req, res) => {
-  const token = req.cookies.user;
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  });
   
-  if (decoded) {
-    console.log('decoded');
+  
+  
+  // if (decoded) {
+  //   console.log('decoded');
     
-    res.end('ok');
-  } else {
-    console.log('decoded failed');
+  //   res.end('ok');
+  // } else {
+  //   console.log('decoded failed');
     
-    res.redirect('/auth/login');
-  }
+  //   res.redirect('/auth/login');
+  // }
 });
 
 app.listen(9000, () => {
