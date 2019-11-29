@@ -11,8 +11,8 @@ const { TextArea } = Input;
 class Write extends Component {
   state = {
     value: '',
+    affectivity: '',
     visible: false,
-    // postDate: this.props.postDate,
   };
   
   showModal = () => {
@@ -24,12 +24,12 @@ class Write extends Component {
   handleOk = e => {
     console.log(e);
     this.setState({
-      visible: true,
+      visible: false,
     });
     
     axios.post('http://localhost:9000/post/write', {
       paragraph: this.state.value,
-      postDate: this.state.postDate,
+      affectivity: this.state.affectivity,
     })
     .then((response) => {
       console.log('send text successfully');
@@ -40,14 +40,19 @@ class Write extends Component {
   };
 
   handleCancel = e => {
-const { date } = this.props.location.state;
-console.log(e);
+    const { date } = this.props.location.state;
+    console.log(e);
     this.setState({
       visible: false,
     });
     console.log(date);
-    
   };
+  
+  emotionChange = e => {
+    this.setState({
+      affectivity: e.target.value,
+    });
+  }
 
   onChange = ({ target: { value } }) => {
     this.setState({ value });
@@ -61,9 +66,9 @@ console.log(e);
         <div className="one-liveClock-container">
           <LiveClock />
         </div> 
-        <TextArea placeholder="...그래서 오늘은 어땠어?" className="one-textarea" />
+        <TextArea placeholder="...그래서 오늘은 어땠어?" className="one-textarea" onChange={this.onChange} />
         <div className="one-post-btn-container flex">
-          <Emotion />
+          <Emotion onChangeEmotion={this.emotionChange} />
           <Button type="primary" onClick={this.showModal} className="btn btn-submit">저장</Button>
           <Modal title="글이 완성되었습니다." visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} >
 {/* 저장 modal ok 후 작성된 글 보는 페이지로 이동하는 부분 수정 미완성 */}

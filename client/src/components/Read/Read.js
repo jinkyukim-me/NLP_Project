@@ -21,6 +21,7 @@ class Read extends React.Component {
   state = {
     value: '',
   }
+  
   onChange = (date, dateString) => {
     console.log(date, dateString)
   }
@@ -28,21 +29,10 @@ class Read extends React.Component {
   render() {
     return (
       <>
-      <section className="Content-section-layout">
-      // 메뉴의 서브메뉴로 옮겨질수도...
-        <div> 
-          <DatePicker onChange={this.onChange} />
-          <br />
-          <MonthPicker onChange={this.onChange} placeholder="Select month" />
-          <br />
-          <RangePicker onChange={this.onChange} />
-          <br />
-        </div>
         <div>
-          // 저장소 
-        </div>        
-      </section>    
-    </>
+          
+        </div>
+      </>
     )
   }
 }

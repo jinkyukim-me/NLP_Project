@@ -46,6 +46,16 @@ class App extends Component {
     });
   }
   
+  pickedPost = (date, dateString) => {
+    dateString = dateString.substr( 0, 10 );
+    console.log(dateString);
+    
+    this.props.history.push({
+      pathname: `/post/${dateString}`,
+      state: {date: dateString}
+    });
+  }
+  
   handleOk = e => {
     console.log(e);
     this.setState({
@@ -105,12 +115,9 @@ class App extends Component {
                 }
               >              
                 <Menu.Item key="2">
-                  <Link to="/post">
-                    <MonthPicker 
-                      onChange={this.onChange}
-                      // value={this.state.value} 
-                      placeholder="Select month" />                  
-                  </Link> 
+                  <DatePicker
+                    onChange={this.pickedPost}
+                  />
                 <span className="nav-text"></span>
                 </Menu.Item>            
               </SubMenu>              
@@ -125,7 +132,6 @@ class App extends Component {
               >              
                 <Menu.Item key="3">
                   <DatePicker  
-                    // value={this.state.date}
                     onChange={this.pickedDate}
                   />
                 <span className="nav-text"></span>

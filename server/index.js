@@ -21,17 +21,27 @@ app.use(session({
   saveUninitialized: false,
 }));
 
-const authenticate = (req, res, next) => {
-  const token = req.cookies.user;
-  
-  if (!token) {
-    return next();
+const db = knex({
+  client: "mysql",
+  connection: {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   }
-  
-  res.redirect('/');
-}
+});
 
-app.use('/auth', authenticate, auth);
+// const authenticate = (req, res, next) => {
+//   const token = req.cookies.user;
+  
+//   if (token) {
+//     return next();
+//   }
+  
+//   res.redirect('/');
+// }
+
+app.use('/auth', auth);
 
 app.get('/', (req, res) => {
   const token = req.cookies.user;
@@ -43,6 +53,80 @@ app.get('/', (req, res) => {
   }
 });
 
+app.post('/post/write', (req, res) => {
+  // let num = /^\d+?/;
+  // let view = req.params.view;
+  // const userId = req.body.user_id;
+  const userId = 31;
+  const postDate = req.body.postDate;
+  const paragraph = req.body.paragraph;
+  const affectivity = req.body.affectivity;
+  
+  db.raw(`INSERT INTO post (user_id, paragraph, created_data_time, modified_data_time) VALUES (${userId}, '${paragraph}', now(), now())`)
+  .then((response) => {
+    res.status(200).end('OK');
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).end('FAILED');
+  });
+  
+  db.raw(`INSERT INTO emotion (affectivity, created_data_time) VALUES ('${affectivity}', now())`)
+  .then((response) => {
+    res.status(200).end('OK');
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).end('FAILED');
+  });
+});
+
+app.put('/post/modify', (req, res) => {
+  const userId = 31;
+  const paragraph = req.body.paragraph;
+  const affectivity = req.body.affectivity;
+  
+  db.raw(`UPDATE post SET paragraph = '${paragraph}', modified_data_time = now() WHERE user_id = ${userId}`)
+  .then((response) => {
+    res.status(200).end('OK');
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).end('FAILED');
+  });
+});
+
+app.post('/post/:view', (req, res) => {
+  const userId = 31;
+  // const date = this.props.date;
+  const date = this.state.date;
+  
+  db.raw(`SELECT id, paragraph, created_data_time FROM post WHERE user_id = ${userId}`)
+  .then((response) => {
+    const days = response[0];
+    const pickedDays = [];
+    
+    for (let i = 0; i < 3; i++) {
+      const id = days[i].id;
+      const paragraph = days[i].paragraph;
+      const dbDate = days[i].created_data_time;
+      
+      if (date === dbDate) {
+        pickedDays.push({id: id, paragraph: paragraph});
+      }
+    }
+    
+    console.log(date, pickedDays, typeof dbDate);
+    res.end('ok');
+  })
+  .catch((error) => {
+    console.error(error);
+  })
+});
+
+// app.get('/list', (req, res) => {
+  // const 
+// });
 
 app.get('/setting', (req, res) => {
   const token = req.cookies.user;
