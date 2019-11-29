@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap&subset=korean');
+
 // layout
 .flex {
   display: flex;
@@ -237,4 +239,30 @@
   height: 100%;
   text-align: center;
 
+}
+
+.readComp {
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding-top: 3em;
+  
+  .post {
+    width: 80%;
+    margin-bottom: 1.5em;
+    padding: 1.4em 2.4em;
+    border-radius: 10px;
+    background-color: #eee;
+    font: 1.6rem/1.5 'Nanum Pen Script', cursive;
+  }
+  
+  .date {
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    font-size: 1.4rem;
+  }
+  
+  // .txt {
+  //   min-height: 1em;
+  // }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Input, Select, Button, AutoComplete } from 'antd';
+import axios from 'axios';
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
@@ -16,6 +17,17 @@ class Settings extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        
+        axios.put('http://localhost:9000/setting', {
+          password: values.password,
+        })
+        .then((response) => {
+          this.props.history.push('/');
+          console.log('ok');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
       }
     });
   };
