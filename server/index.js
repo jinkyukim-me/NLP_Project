@@ -97,31 +97,35 @@ app.put('/post/modify', (req, res) => {
 });
 
 app.post('/post/:view', (req, res) => {
+  const num = /^\d+?/;
+  const view = req.params.view;
   const userId = 31;
   // const date = this.props.date;
-  const date = this.state.date;
+  const {date} = this.props.state;
   
-  db.raw(`SELECT id, paragraph, created_data_time FROM post WHERE user_id = ${userId}`)
-  .then((response) => {
-    const days = response[0];
-    const pickedDays = [];
-    
-    for (let i = 0; i < 3; i++) {
-      const id = days[i].id;
-      const paragraph = days[i].paragraph;
-      const dbDate = days[i].created_data_time;
+  if (view.match(num)) {
+    db.raw(`SELECT id, paragraph, created_data_time FROM post WHERE user_id = ${userId}`)
+    .then((response) => {
+      const days = response[0];
+      const pickedDays = [];
       
-      if (date === dbDate) {
-        pickedDays.push({id: id, paragraph: paragraph});
+      for (let i = 0; i < 3; i++) {
+        const id = days[i].id;
+        const paragraph = days[i].paragraph;
+        const dbDate = days[i].created_data_time;
+        
+        if (date === dbDate) {
+          pickedDays.push({id: id, paragraph: paragraph});
+        }
       }
-    }
-    
-    console.log(date, pickedDays, typeof dbDate);
-    res.end('ok');
-  })
-  .catch((error) => {
-    console.error(error);
-  })
+      
+      console.log(date, pickedDays, typeof dbDate);
+      res.end('ok');
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
 });
 
 // app.get('/list', (req, res) => {
