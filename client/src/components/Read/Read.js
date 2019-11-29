@@ -1,22 +1,5 @@
-import React from 'react'
-import 'antd/dist/antd.css'
-import { DatePicker } from 'antd'
-import axios from 'axios';
-
-const { MonthPicker, RangePicker } = DatePicker;
-
-// axios.get(`http://localhost:9000/post/${this.props.postDate}`, {
-//   postDate: this.props.postDate,
-// })
-// .then((response) => {
-//   this.setState({
-//     value: response.paragraph,
-//   })
-// })
-// .catch((error) => {
-//   res.state(500).end('FAILED');
-// });
-
+import React from 'react';
+  
 class Read extends React.Component {
   state = {
     value: '',
@@ -25,12 +8,20 @@ class Read extends React.Component {
   onChange = (date, dateString) => {
     console.log(date, dateString)
   }
-
+    
   render() {
+    const { todays_post } = this.props.location.state;
+    
     return (
       <>
-        <div>
-          
+        <div className="readComp flex">
+          {
+            todays_post.map((v) => {
+              return (
+                <div className="post" key={v.id}><div className="date">{v.date}</div><div className="txt">{v.paragraph}</div></div>
+              )
+            })
+          }
         </div>
       </>
     )

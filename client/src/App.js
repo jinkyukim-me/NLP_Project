@@ -48,11 +48,16 @@ class App extends Component {
   
   pickedPost = (date, dateString) => {
     dateString = dateString.substr( 0, 10 );
-    console.log(dateString);
     
-    this.props.history.push({
-      pathname: `/post/${dateString}`,
-      state: {date: dateString}
+    axios.get(`http://localhost:9000/post/${dateString}`)
+    .then((response) => {
+      this.props.history.push({
+        pathname: `/post/${dateString}`,
+        state: {todays_post: response.data.todays_post},
+      });
+    })
+    .catch((error) => {
+      console.error(error);
     });
   }
   
@@ -170,14 +175,14 @@ class App extends Component {
                 {/* content 영역만 switch 되며 화면에 보여진다.                 */}
               <Switch>
                 <Route exact path="/" component={Home} />
-                <Route path="/post/write" component={Write} />
                 <Route path="/auth/login" component={NormalLoginForm} />
-                <Route path="/setting" component={Settings} />
                 <Route path="/auth/signup" component={SingUp} />
                 <Route path="/unsubscribe" component={Unsubscribe} />
                 {/* <Route path="/logout" component={Logout} /> */}
                 <Route path="/list" component={PostsList} />
-                <Route path={`/post/:view`} component={Read} />
+                <Route path="/post/:view" component={Read} />
+                <Route path="/post/write" component={Write} />
+                <Route path="/setting" component={Settings} />
                 {/* <Route path="/post/:" component={Review} /> */}
 {/* 글 저장 후 보여질 페이지의 경로를 확인해주세요. '/post/:숫자'로 하기로 했던 것 같은데...ㅎ */}
                 {/* 읽기 기능 구현 후 추가 예정
