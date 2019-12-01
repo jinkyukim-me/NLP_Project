@@ -1,6 +1,6 @@
 # NLP_Project_
 ## Group member
-* Full stack - 신정섭, 한초롱
+* Full stack - 신정섭, **한초롱**
 * Big data - 허재은, 박주영
 * AI - 이호정, 정승환, 김진규
 ## Position
